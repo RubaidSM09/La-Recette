@@ -1,0 +1,14 @@
+flutter_native_splash:
+  color: "#EAE7DC"
+  color_dark: "#8E8D8A"
+  image: assets/logos/La Recittie Logo-01.png
+  image_dark: assets/logos/La Recittie Logo Dark Mode-01.png
+
+  android_12:
+    color: "#EAE7DC"
+    color_dark: "#8E8D8A"
+    image: assets/logos/La Recittie Logo-01.png
+    image_dark: assets/logos/La Recittie Logo Dark Mode-01.png
+
+
+  web: false
