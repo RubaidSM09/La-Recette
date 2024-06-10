@@ -29,7 +29,7 @@ class VerifyEmailScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () => Get.back(),
               icon: const Icon(CupertinoIcons.clear))
         ],
       ),

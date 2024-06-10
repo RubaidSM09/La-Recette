@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:t_store/features/authentication/screens/password_configuration/forget_password.dart';
 import 'package:t_store/features/authentication/screens/signup/signup.dart';
 // import 'package:t_store/features/authentication/controllers/login/login_controller.dart';
 // import 'package:t_store/features/authentication/screens/password_configuration/forget_password.dart';
@@ -48,7 +49,7 @@ class TLoginForm extends StatelessWidget {
             TextFormField(
                 decoration: InputDecoration(
                   labelText: TTexts.password,
-                  labelStyle: TextStyle(color: dark ? TColors.dark : Color(0xFFE85A4F)),
+                  labelStyle: TextStyle(color: dark ? TColors.dark : const Color(0xFFE85A4F)),
                   filled: true, // This makes the field background white
                   fillColor: dark ? const Color(0xFF3A3A3A) : Colors.white,
                   enabledBorder: OutlineInputBorder(
@@ -73,7 +74,7 @@ class TLoginForm extends StatelessWidget {
                   ],
                 ),
                 ///Forget Password
-                TextButton(onPressed: () {}, child: Text(TTexts.forgetPassword, style: TextStyle(color: dark ? TColors.dark: TColors.light),)),
+                TextButton(onPressed: () => Get.to(() => const ForgetPassword()), child: Text(TTexts.forgetPassword, style: TextStyle(color: dark ? TColors.dark: TColors.light),)),
               ],
             ),
             const SizedBox(height: TSizes.spaceBtwSections),
