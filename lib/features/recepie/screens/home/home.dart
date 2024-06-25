@@ -12,6 +12,7 @@ import 'package:t_store/utils/constants/colors.dart';
 
 import 'package:t_store/utils/constants/image_strings.dart';
 import 'package:t_store/utils/constants/sizes.dart';
+import 'package:t_store/utils/constants/text_strings.dart';
 import 'package:t_store/utils/helpers/helper_functions.dart';
 
 
@@ -35,6 +36,16 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(
                     height: TSizes.spaceBtwSections,
                   ),
+                  const TPromoSlider(
+                    banners: [
+                      TImages.promoBanner1,
+                      TImages.promoBanner2,
+                      TImages.promoBanner3
+                    ],
+                  ),
+                  const SizedBox(
+                    height: TSizes.spaceBtwSections,
+                  ),
                   const TSearchContainer(
                     text: 'Search',
                   ),
@@ -45,10 +56,16 @@ class HomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                     child: Column(
                       children: [
-                        TSectionHeading(
-                          title: 'Popular Categories',
-                          showActionButton: false,
-                          textColor: dark ? TColors.dark : const Color(0xFFE85A4F),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TSectionHeading(
+                              title: 'Categories',
+                              showActionButton: false,
+                              textColor: dark ? TColors.dark : const Color(0xFFE85A4F),
+                            ),
+                            TextButton(onPressed: () {}, child: Text('Search by Ingredients', style: TextStyle(color: dark ? TColors.dark: const Color(0xFFE85A4F)),)),
+                          ],
                         ),
                         const SizedBox(
                           height: TSizes.spaceBtwItems,
@@ -62,24 +79,10 @@ class HomeScreen extends StatelessWidget {
                   ),
               Padding(
                 padding: const EdgeInsets.all(TSizes.defaultSpace),
-                child: Column(
-                  children: [
-                    const TPromoSlider(
-                      banners: [
-                        TImages.promoBanner1,
-                        TImages.promoBanner2,
-                        TImages.promoBanner3
-                      ],
-                    ),
-                    const SizedBox(
-                      height: TSizes.spaceBtwSections,
-                    ),
-                    TGridLayout(
+                child: TGridLayout(
                         itemCount: 4,
                         itemBuilder: (_, index) => const TProductCardVertical()),
-                  ],
                 ),
-              )
             ],
           ),
       ),

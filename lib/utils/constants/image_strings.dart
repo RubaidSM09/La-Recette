@@ -48,6 +48,9 @@ class TImages {
   static const String onBoardingImage2 = "assets/images/on_boarding_images/food preparation.gif";
   static const String onBoardingImage3 = "assets/images/on_boarding_images/Food Vlogger.gif";
 
+  // -- Ingredients
+  static const String ingredientImage1 = "assets/images/ingredients/eggs.png";
+
   // -- Products
   static const String recepieImage1 = "assets/images/foods/AlishaMam_Brownie.png";
   static const String productImage2 = "assets/images/foods/product-1.png";
