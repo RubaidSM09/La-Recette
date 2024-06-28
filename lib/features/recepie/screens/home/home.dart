@@ -1,10 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import 'package:t_store/common/widgets/texts/section_heading.dart';
 
-import 'package:t_store/features/recepie/screens/all_products/all_products.dart';
 import 'package:t_store/features/recepie/screens/home/widgets/home_appbar.dart';
 import 'package:t_store/features/recepie/screens/home/widgets/home_categories.dart';
 import 'package:t_store/features/recepie/screens/home/widgets/promo_slider.dart';
@@ -12,11 +10,9 @@ import 'package:t_store/utils/constants/colors.dart';
 
 import 'package:t_store/utils/constants/image_strings.dart';
 import 'package:t_store/utils/constants/sizes.dart';
-import 'package:t_store/utils/constants/text_strings.dart';
 import 'package:t_store/utils/helpers/helper_functions.dart';
 
 
-import '../../../../common/widgets/custom_shapes/containers/primary_header_container.dart';
 import '../../../../common/widgets/custom_shapes/containers/search_container.dart';
 import '../../../../common/widgets/layouts/grid_layout.dart';
 import '../../../../common/widgets/recepies/recepie_cards/product_card_vertical.dart';

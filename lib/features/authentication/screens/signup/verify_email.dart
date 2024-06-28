@@ -92,7 +92,7 @@ class VerifyEmailScreen extends StatelessWidget {
                   child: ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        primary: const Color(0xFFE85A4F), // Background color
+                        backgroundColor: const Color(0xFFE85A4F), // Background color
                       ),
                       child: const Text(TTexts.tContinue, style: TextStyle(color: TColors.dark),),)
               ),

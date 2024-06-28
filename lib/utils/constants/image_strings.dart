@@ -130,7 +130,8 @@ class TImages {
   static const String productImage76 = "assets/images/foods/slipper-product-3.png";
   static const String productImage77= "assets/images/foods/slipper-product.png";
 
-
+  static const String addIngredientsImage = "assets/images/ingredients/add_ingredients.png";
+  static const String addBlogImage = "assets/images/blogs/add_blog.png";
 
 
   // -- Product Reviews

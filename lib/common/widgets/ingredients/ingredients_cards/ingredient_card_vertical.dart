@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:t_store/common/widgets/recepies/favourite_icon/favourite_icon.dart';
 // import 'package:t_store/features/recepie/controllers/product/cart_controller.dart';
 // import 'package:t_store/features/recepie/controllers/product/product_controller.dart';
 // import 'package:t_store/features/recepie/models/product_model.dart';
-import 'package:t_store/features/recepie/screens/product_details/product_detail.dart';
-import 'package:t_store/utils/constants/enums.dart';
 import 'package:t_store/utils/constants/image_strings.dart';
 
 import '../../../../utils/constants/colors.dart';
@@ -15,9 +10,7 @@ import '../../../../utils/helpers/helper_functions.dart';
 import '../../../styles/shadow_styles.dart';
 import '../../custom_shapes/containers/rounded_container.dart';
 import '../../images/t_rounded_image.dart';
-import '../../texts/product_price_text.dart';
 import '../../texts/product_title_text.dart';
-import '../../texts/t_brand_title_text_with_verified_icon.dart';
 
 
 class TIngredientCardVertical extends StatelessWidget {

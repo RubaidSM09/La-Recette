@@ -47,7 +47,7 @@ class CheckoutScreen extends StatelessWidget {
                 height: TSizes.spaceBtwSections,
               ),
               TRoundedContainer(
-                padding: EdgeInsets.all(TSizes.md),
+                padding: const EdgeInsets.all(TSizes.md),
                 showBorder: true,
                 backgroundColor: dark ? TColors.black : TColors.white,
                 child: const Column(children: [

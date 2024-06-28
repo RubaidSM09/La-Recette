@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:t_store/features/recepie/screens/home/home.dart';
 import 'package:t_store/features/recepie/screens/blogs/blogs.dart';
+import 'package:t_store/features/recepie/screens/home/home.dart';
 import 'package:t_store/features/recepie/screens/favourites/favourites.dart';
 import 'package:t_store/features/recepie/screens/ingredients/ingredients.dart';
 import 'package:t_store/utils/constants/colors.dart';

@@ -5,7 +5,6 @@ import 'package:t_store/features/authentication/screens/password_configuration/r
 import 'package:t_store/utils/constants/colors.dart';
 import 'package:t_store/utils/constants/text_strings.dart';
 import 'package:t_store/utils/helpers/helper_functions.dart';
-import 'package:t_store/utils/theme/widget_themes/text_theme.dart';
 
 import '../../../../utils/constants/sizes.dart';
 

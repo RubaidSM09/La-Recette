@@ -8,7 +8,6 @@ import 'package:t_store/navigation_menu.dart';
 // import 'package:t_store/features/authentication/screens/password_configuration/forget_password.dart';
 // import 'package:t_store/features/authentication/screens/signup/signup.dart';
 
-import 'package:t_store/utils/validators/validation.dart';
 
 import '../../../../../utils/constants/colors.dart';
 import '../../../../../utils/constants/sizes.dart';
@@ -81,7 +80,7 @@ class TLoginForm extends StatelessWidget {
             const SizedBox(height: TSizes.spaceBtwSections),
             ///Sign in button
             SizedBox(
-                width: double.infinity, child: ElevatedButton(onPressed: () => Get.to(() => const NavigationMenu()), style: ElevatedButton.styleFrom(primary: const Color(0xFFE85A4F)), child: const Text(TTexts.signIn, style: TextStyle(color: TColors.dark),))
+                width: double.infinity, child: ElevatedButton(onPressed: () => Get.to(() => const NavigationMenu()), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE85A4F)), child: const Text(TTexts.signIn, style: TextStyle(color: TColors.dark),))
             ),
             const SizedBox(height: TSizes.spaceBtwItems),
 
