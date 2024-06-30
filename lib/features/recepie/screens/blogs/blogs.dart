@@ -1,7 +1,6 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 
 // import 'package:t_store/common/widgets/appbar/appbar.dart';
@@ -14,8 +13,6 @@ import 'package:get/get.dart';
 // import '../../../../common/widgets/brand/T_brand_card.dart';
 // import '../../../../common/widgets/custom_shapes/containers/search_container.dart';
 // import '../../../../common/widgets/texts/section_heading.dart';
-import '../../../../utils/constants/colors.dart';
-import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/helpers/helper_functions.dart';
 
 class BlogsScreen extends StatelessWidget {
