@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:t_store/features/personalization/screens/profile/profile.dart';
 // import 'package:t_store/common/widgets/custom_shapes/containers/primary_header_container.dart';
 // import 'package:t_store/common/widgets/list_tiles/settings_menu_tile.dart';
 // import 'package:t_store/features/personalization/screens/address/address.dart';
@@ -157,18 +159,21 @@ class SettingsScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/images/profile_images/profile-svgrepo-com.svg',
-                        color: const Color(0xFFE85A4F),
-                        height: 48,
-                        width: 48,
-                      ),
-                      const SizedBox(height: 8),
-                      const Text('View/Edit Profile'),
-                    ],
+                  TextButton(
+                    onPressed: () => Get.to(() => const ProfileScreen()),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/images/profile_images/profile-svgrepo-com.svg',
+                          color: const Color(0xFFE85A4F),
+                          height: 48,
+                          width: 48,
+                        ),
+                        const SizedBox(height: 8),
+                        const Text('View/Edit Profile'),
+                      ],
+                    ),
                   ),
                   Column(
                     mainAxisSize: MainAxisSize.min,
