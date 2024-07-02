@@ -45,6 +45,6 @@ class NavigationMenu extends StatelessWidget {
 class NavigationController extends GetxController{
   final Rx<int> selectedIndex = 0.obs;
 
-  final screens = [const HomeScreen(), const BlogsScreen(), const IngredientsScreen(), const FavouriteScreen(), const SettingsScreen(),];
+  final screens = [const HomeScreen(), const BlogPage(), const IngredientsScreen(), const FavouriteScreen(), const SettingsScreen(),];
   // final screens = [Colors.red, Colors.green, Colors.blue, Colors.yellow,];
 }
