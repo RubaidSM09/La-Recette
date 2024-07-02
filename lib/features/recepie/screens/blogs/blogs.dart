@@ -1,224 +1,109 @@
+
+
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:html' as html;
+import 'package:get/get.dart';
 
-class BlogPage extends StatefulWidget {
-  const BlogPage({Key? key}) : super(key: key);
 
-  @override
-  _BlogPageState createState() => _BlogPageState();
-}
+// import 'package:t_store/common/widgets/appbar/appbar.dart';
+// import 'package:t_store/common/widgets/layouts/grid_layout.dart';
+// import 'package:t_store/common/widgets/products/cart/cart_menu_icon.dart';
+// import 'package:t_store/features/shop/screens/brand/all_brands.dart';
+//
+// import 'package:t_store/features/shop/screens/store/widgets/category_tab.dart';
+// import '../../../../common/widgets/appbar/tabbar.dart';
+// import '../../../../common/widgets/brand/T_brand_card.dart';
+// import '../../../../common/widgets/custom_shapes/containers/search_container.dart';
+// import '../../../../common/widgets/texts/section_heading.dart';
+import '../../../../utils/constants/colors.dart';
+import '../../../../utils/constants/sizes.dart';
+import '../../../../utils/helpers/helper_functions.dart';
 
-class _BlogPageState extends State<BlogPage> {
-  final TextEditingController _textController = TextEditingController();
-  final TextEditingController _searchController = TextEditingController();
-  final ImagePicker _picker = ImagePicker();
-  String? _imageFileUrl;
-  String? _videoFileUrl;
-  List<Map<String, String?>> _blogs = [];
-  String _sortOption = 'Popularity';
-  List<String> _sortOptions = ['Popularity', 'Newest', 'Oldest'];
-
-  Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      final bytes = await pickedFile.readAsBytes();
-      final blob = html.Blob([bytes]);
-      final url = html.Url.createObjectUrlFromBlob(blob);
-      setState(() {
-        _imageFileUrl = url;
-        _videoFileUrl = null;
-      });
-    }
-  }
-
-  Future<void> _pickVideo() async {
-    final pickedFile = await _picker.pickVideo(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      final bytes = await pickedFile.readAsBytes();
-      final blob = html.Blob([bytes]);
-      final url = html.Url.createObjectUrlFromBlob(blob);
-      setState(() {
-        _videoFileUrl = url;
-        _imageFileUrl = null;
-      });
-    }
-  }
-
-  void _uploadBlog() {
-    if (_textController.text.isEmpty && _imageFileUrl == null && _videoFileUrl == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please add some text, an image, or a video')),
-      );
-      return;
-    }
-
-    setState(() {
-      _blogs.add({
-        'text': _textController.text,
-        'imageUrl': _imageFileUrl,
-        'videoUrl': _videoFileUrl,
-      });
-
-      _textController.clear();
-      _imageFileUrl = null;
-      _videoFileUrl = null;
-    });
-  }
-
-  void _sortBlogs(String sortOption) {
-    setState(() {
-      _sortOption = sortOption;
-      // Add sorting logic based on the selected option
-    });
-  }
+class BlogsScreen extends StatelessWidget {
+  const BlogsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          color: Color(0xFFE85A4F),
-          onPressed: () => Navigator.of(context).pop(),
+    final dark = THelperFunctions.isDarkMode(context);
+    return DefaultTabController(
+        length: 5,
+        child: Scaffold(
+          // appBar: TAppBar(
+          //   showBackArrow: true,
+          //   title: Text('Store', style: Theme
+          //       .of(context)
+          //       .textTheme
+          //       .headlineMedium),
+          //   actions: [
+          //     TCartCounterIcon(onPressed: () {},
+          //         iconColor: dark ? TColors.white : TColors.black)
+          //   ],
+          // ),
+          // body: NestedScrollView(
+          //     headerSliverBuilder: (_, innerBoxIsScrolled) {
+          //       return [
+          //         SliverAppBar(
+          //             automaticallyImplyLeading: false,
+          //             pinned: true,
+          //             floating: true,
+          //             backgroundColor: THelperFunctions.isDarkMode(context) ? TColors.black : TColors.white,
+          //             expandedHeight: 440,
+          //             //
+          //             flexibleSpace: Padding(
+          //               padding: const EdgeInsets.all(TSizes.defaultSpace),
+          //               child: ListView(
+          //                 shrinkWrap: true,
+          //                 physics: const NeverScrollableScrollPhysics(),
+          //                 children:  [
+          //                   ///Search Bar
+          //                   const SizedBox(height: TSizes.spaceBtwItems,),
+          //                   //TSearchContainer(text: '',showBorder: true,showBackground: false,padding: EdgeInsets.zero),
+          //                   const TSearchContainer(
+          //                     text: 'Search in Store',
+          //                     showBorder: true,
+          //                     showBackground: false,
+          //                     padding: EdgeInsets.zero,
+          //                   ),
+          //                   const SizedBox(height: TSizes.spaceBtwSections,),
+          //
+          //                   ///Featured Brands
+          //                   TSectionHeading(title: 'Featured Brands                     ', onPressed: () => Get.to(const AllBrandsScreen())),
+          //                   const SizedBox(height: TSizes.spaceBtwItems / 1.5),
+          //
+          //                   TGridLayout(itemCount: 4, mainAxisExtent: 80,itemBuilder: (_,index){
+          //                     return const TBrandCard(
+          //                       showBorder: true,
+          //                     );
+          //
+          //                   })
+          //                 ],
+          //               ),
+          //
+          //             ),
+          //             ///Tab
+          //             bottom: const TTabBar(tabs: [
+          //               Tab(child: Text('Sports')),
+          //               Tab(child: Text('Furniture')),
+          //               Tab(child: Text('Electronics')),
+          //               Tab(child: Text('Clothes')),
+          //               Tab(child: Text('Cosmetics'))
+          //             ])
+          //         ),
+          //       ];
+          //     },
+          //     body: const TabBarView(
+          //       children: [
+          //         TCategoryTab(),
+          //         TCategoryTab(),
+          //         TCategoryTab(),
+          //         TCategoryTab(),
+          //         TCategoryTab(),
+          //       ],
+          //     )
+          // ),
+          body: Container(color: Colors.green,),
         ),
-        title: Text('Blog Page'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  labelText: 'Search blogs...',
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none, // Remove border
-                  ),
-                  prefixIcon: Icon(Icons.search, color: Colors.black),
-                  labelStyle: TextStyle(color: Colors.black),
-                ),
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Sort by:', style: TextStyle(color: Colors.black)),
-                  DropdownButton<String>(
-                    value: _sortOption,
-                    onChanged: (String? newValue) {
-                      if (newValue != null) {
-                        _sortBlogs(newValue);
-                      }
-                    },
-                    items: _sortOptions.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value, style: TextStyle(color: Colors.black)),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: _textController,
-                maxLines: 5,
-                decoration: InputDecoration(
-                  labelText: 'Write your blog...',
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none, // Remove border
-                  ),
-                  labelStyle: TextStyle(color: Colors.black),
-                ),
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.image),
-                  color: Colors.black,
-                  onPressed: _pickImage,
-                ),
-                IconButton(
-                  icon: Icon(Icons.videocam),
-                  color: Colors.black,
-                  onPressed: _pickVideo,
-                ),
-              ],
-            ),
-            if (_imageFileUrl != null)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Image.network(_imageFileUrl!),
-              ),
-            if (_videoFileUrl != null)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Video selected: $_videoFileUrl', style: TextStyle(color: Colors.black)),
-              ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                onPressed: _uploadBlog,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFE85A4F), // Button background color
-                  padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0), // Button padding
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(0), // Remove border radius
-                  ),
-                  elevation: 0, // Remove shadow
-                ),
-                child: Text(
-                  'Upload Blog',
-                  style: TextStyle(color: Colors.white), // Button text color
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 400,
-              child: ListView.builder(
-                itemCount: _blogs.length,
-                itemBuilder: (context, index) {
-                  final blog = _blogs[index];
-                  return Card(
-                    margin: EdgeInsets.all(8.0),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(blog['text'] ?? '', style: TextStyle(color: Colors.black)),
-                          if (blog['imageUrl'] != null)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Image.network(blog['imageUrl']!),
-                            ),
-                          if (blog['videoUrl'] != null)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Text('Video selected: ${blog['videoUrl']}', style: TextStyle(color: Colors.black)),
-                            ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
     );
+
   }
 }
+

@@ -7,7 +7,6 @@ import 'package:t_store/utils/constants/image_strings.dart';
 import 'package:t_store/utils/constants/sizes.dart';
 import 'package:t_store/utils/helpers/helper_functions.dart';
 
-import '../../../../../navigation_menu.dart';
 
 class AddIngredientsScreen extends StatelessWidget {
   const AddIngredientsScreen({super.key});
