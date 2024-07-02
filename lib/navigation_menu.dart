@@ -5,6 +5,8 @@ import 'package:t_store/features/recepie/screens/blogs/blogs.dart';
 import 'package:t_store/features/recepie/screens/home/home.dart';
 import 'package:t_store/features/recepie/screens/favourites/favourites.dart';
 import 'package:t_store/features/recepie/screens/ingredients/ingredients.dart';
+import 'package:t_store/features/recepie/screens/meal_planner/meal_planner.dart';
+import 'package:t_store/features/recepie/screens/reviews_ratings/reviews_ratings.dart';
 import 'package:t_store/utils/constants/colors.dart';
 import 'package:t_store/utils/helpers/helper_functions.dart';
 
@@ -45,6 +47,6 @@ class NavigationMenu extends StatelessWidget {
 class NavigationController extends GetxController{
   final Rx<int> selectedIndex = 0.obs;
 
-  final screens = [const HomeScreen(), const BlogsScreen(), const IngredientsScreen(), const FavouriteScreen(), const SettingsScreen(),];
+  final screens = [const HomeScreen(), const BlogPage(), const IngredientsScreen(), const FavouriteScreen(), RatingsAndReviewsScreen(),];
   // final screens = [Colors.red, Colors.green, Colors.blue, Colors.yellow,];
 }
