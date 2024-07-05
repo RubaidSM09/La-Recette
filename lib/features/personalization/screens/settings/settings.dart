@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:t_store/data/repositories/authentication/authentication_repository.dart';
 import 'package:t_store/features/personalization/screens/profile/profile.dart';
+import 'package:t_store/features/personalization/screens/settings/add-recipe/add_recipe.dart';
 // import 'package:t_store/common/widgets/custom_shapes/containers/primary_header_container.dart';
 // import 'package:t_store/common/widgets/list_tiles/settings_menu_tile.dart';
 // import 'package:t_store/features/personalization/screens/address/address.dart';
@@ -18,6 +20,7 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final auth= AuthenticationRepository.instance;
     return Scaffold(
       // body: SingleChildScrollView(
       //   child: Column(
@@ -175,18 +178,21 @@ class SettingsScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/images/profile_images/bookmark-svgrepo-com.svg',
-                        color: const Color(0xFFE85A4F),
-                        height: 48,
-                        width: 48,
-                      ),
-                      const SizedBox(height: 8),
-                      const Text('Bookmarks'),
-                    ],
+                  TextButton(
+                    onPressed: () async => auth.logout(),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/images/profile_images/bookmark-svgrepo-com.svg',
+                          color: const Color(0xFFE85A4F),
+                          height: 48,
+                          width: 48,
+                        ),
+                        const SizedBox(height: 8),
+                        const Text('Bookmarks'),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -241,21 +247,24 @@ class SettingsScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 60),
-              const Row(
+              Row(
                 children: [
-                  Text(
+                  const Text(
                     'Your Recipes',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Spacer(),
-                  Text(
-                    '+ Add New',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Color(0xFFE85A4F),
+                  const Spacer(),
+                  TextButton(
+                    onPressed: () => Get.to(() => const AddProcedureScreen()),
+                    child: const Text(
+                      '+ Add New',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Color(0xFFE85A4F),
+                      ),
                     ),
                   ),
                 ],

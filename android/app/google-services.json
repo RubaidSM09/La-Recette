@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "712834459798",
+    "project_id": "la-recette-28025",
+    "storage_bucket": "la-recette-28025.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712834459798:android:745f1e87daec3b3520fab7",
+        "android_client_info": {
+          "package_name": "com.example.t_store"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "712834459798-2np3l74eicgpb800bp5vd3q98vcvhhol.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIzzBJiP51hrIR1FleTmNkLCdCO3ytggg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "712834459798-2np3l74eicgpb800bp5vd3q98vcvhhol.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "712834459798-38ge15f26ho4o6jdoo49bjknn4e0begi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.tStore"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

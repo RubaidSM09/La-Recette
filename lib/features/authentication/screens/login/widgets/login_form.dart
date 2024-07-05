@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:t_store/navigation_menu.dart';
+import 'package:t_store/utils/validators/validation.dart';
+import 'package:t_store/features/authentication/controllers/login/login_controller.dart';
 import 'package:t_store/features/authentication/screens/password_configuration/forget_password.dart';
 import 'package:t_store/features/authentication/screens/signup/signup.dart';
-import 'package:t_store/navigation_menu.dart';
-// import 'package:t_store/features/authentication/controllers/login/login_controller.dart';
-// import 'package:t_store/features/authentication/screens/password_configuration/forget_password.dart';
-// import 'package:t_store/features/authentication/screens/signup/signup.dart';
 
 
 import '../../../../../utils/constants/colors.dart';
@@ -22,16 +21,19 @@ class TLoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark=THelperFunctions.isDarkMode(context);
-    // final controller = Get.put(LoginController());
+    final controller = Get.put(LoginController());
 
     return Form(
-        // key: controller.loginFormKey,
+        key: controller.loginFormKey,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: TSizes.spaceBtwSections),
           child: Column(
           children: [
             ///Email
             TextFormField(
+              style: TextStyle(color: dark ? TColors.dark : TColors.light),
+              controller: controller.email,
+              validator: (value) => TValidator.validateEmail(value),
               decoration:  InputDecoration(
                   prefixIcon: Icon(Iconsax.direct_right, color: dark ? TColors.dark : const Color(0xFFE85A4F),),
                   filled: true, // This makes the field background white
@@ -46,21 +48,32 @@ class TLoginForm extends StatelessWidget {
             const SizedBox(height: TSizes.spaceBtwInputFields,),
 
             ///Password
-            TextFormField(
-                decoration: InputDecoration(
-                  labelText: TTexts.password,
-                  labelStyle: TextStyle(color: dark ? TColors.dark : const Color(0xFFE85A4F)),
-                  filled: true, // This makes the field background white
-                  fillColor: dark ? const Color(0xFF3A3A3A) : Colors.white,
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: dark ? TColors.dark : const Color(0xFFE85A4F)),
-                    borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+            Obx(
+              () => TextFormField(
+                style: TextStyle(color: dark ? TColors.dark : TColors.light),
+                validator: (value) => TValidator.validatePassword(value),
+                controller: controller.password,
+                obscureText: controller.hidePassword.value,
+                expands: false,
+                  decoration: InputDecoration(
+                    labelText: TTexts.password,
+                    labelStyle: TextStyle(color: dark ? TColors.dark : const Color(0xFFE85A4F)),
+                    filled: true, // This makes the field background white
+                    fillColor: dark ? const Color(0xFF3A3A3A) : Colors.white,
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: dark ? TColors.dark : const Color(0xFFE85A4F)),
+                      borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+                    ),
+                    prefixIcon: Icon(Iconsax.password_check, color: dark ? TColors.dark : const Color(0xFFE85A4F)),
+                    suffixIcon: IconButton(
+                      onPressed: () => controller.hidePassword.value =
+                      !controller.hidePassword.value,
+                      icon: Icon(controller.hidePassword.value ? Iconsax.eye_slash : Iconsax.eye, color: dark ? TColors.dark : const Color(0xFFE85A4F)),
                   ),
-                  prefixIcon: Icon(Iconsax.password_check, color: dark ? TColors.dark : const Color(0xFFE85A4F)),
-                  suffixIcon: Icon(Iconsax.eye, color: dark ? TColors.dark : const Color(0xFFE85A4F)),
                 ),
               ),
-              const SizedBox(height: TSizes.spaceBtwInputFields / 2),
+            ),
+            const SizedBox(height: TSizes.spaceBtwInputFields / 2),
 
             ///Remember me &Forget password
             Row(
@@ -69,7 +82,9 @@ class TLoginForm extends StatelessWidget {
                 ///Remember me
                 Row(
                   children: [
-                    Checkbox(value: true, onChanged: (value){}, activeColor: const Color(0xFFE85A4F),),
+                    Obx(() => Checkbox(
+                      value: controller.rememberMe.value,
+                      onChanged: (value) => controller.rememberMe.value = !controller.rememberMe.value, activeColor: const Color(0xFFE85A4F),)),
                     Text(TTexts.rememberMe, style: TextStyle(color: dark ? TColors.dark : const Color(0xFFE85A4F),),)
                   ],
                 ),
@@ -80,7 +95,8 @@ class TLoginForm extends StatelessWidget {
             const SizedBox(height: TSizes.spaceBtwSections),
             ///Sign in button
             SizedBox(
-                width: double.infinity, child: ElevatedButton(onPressed: () => Get.to(() => const NavigationMenu()), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE85A4F)), child: const Text(TTexts.signIn, style: TextStyle(color: TColors.dark),))
+                width: double.infinity,
+                child: ElevatedButton(onPressed: () => controller.emailAndPasswordSignIn(), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE85A4F)), child: const Text(TTexts.signIn, style: TextStyle(color: TColors.dark),))
             ),
             const SizedBox(height: TSizes.spaceBtwItems),
 

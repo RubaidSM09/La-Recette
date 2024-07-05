@@ -1,7 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/get_instance.dart';
+import 'package:t_store/common/widgets/shimmers/vertical_product_shimmer.dart';
 
 import 'package:t_store/common/widgets/texts/section_heading.dart';
+import 'package:t_store/features/recepie/controllers/recipe/recipe_controller.dart';
 
 import 'package:t_store/features/recepie/screens/home/widgets/home_appbar.dart';
 import 'package:t_store/features/recepie/screens/home/widgets/home_categories.dart';
@@ -23,6 +28,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
+
+    final controller = Get.put(RecipeController());
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -75,9 +82,16 @@ class HomeScreen extends StatelessWidget {
                   ),
               Padding(
                 padding: const EdgeInsets.all(TSizes.defaultSpace),
-                child: TGridLayout(
-                        itemCount: 4,
-                        itemBuilder: (_, index) => const TProductCardVertical()),
+                child: Obx(() {
+                  if(controller.isLoading.value) return const TVerticalProductShimmer();
+
+                  if(controller.allRecipes.isEmpty) {
+                    return Center(child: Text('No Data Found!', style: Theme.of(context).textTheme.bodyMedium));
+                  }
+                  return TGridLayout(
+                      itemCount: controller.allRecipes.length,
+                      itemBuilder: (_, index) => TProductCardVertical(recipe: controller.allRecipes[index],));
+                }),
                 ),
             ],
           ),

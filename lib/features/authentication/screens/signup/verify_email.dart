@@ -3,6 +3,8 @@ import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "package:t_store/common/styles/spacing_styles.dart";
+import "package:t_store/data/repositories/authentication/authentication_repository.dart";
+import "package:t_store/features/authentication/controllers/signup/verify_email_controller.dart";
 import "package:t_store/utils/constants/colors.dart";
 
 import "package:t_store/utils/constants/image_strings.dart";
@@ -23,13 +25,13 @@ class VerifyEmailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
-    // final controller = Get.put(VerifyEmailController());
+    final controller = Get.put(VerifyEmailController());
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-              onPressed: () => Get.back(),
+              onPressed: () => AuthenticationRepository.instance.logout(),
               icon: const Icon(CupertinoIcons.clear))
         ],
       ),
@@ -60,7 +62,7 @@ class VerifyEmailScreen extends StatelessWidget {
                 height: TSizes.spaceBtwItems,
               ),
               Text(
-                'rubaids0911@gmail.com',
+                email ?? '',
                 style: TextStyle(
                   color: dark ? TColors.dark : const Color(0xFFE85A4F),
                   fontSize: 12,
@@ -90,7 +92,7 @@ class VerifyEmailScreen extends StatelessWidget {
               SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () => controller.checkEmailVerificationStatus(),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFE85A4F), // Background color
                       ),
@@ -102,7 +104,7 @@ class VerifyEmailScreen extends StatelessWidget {
               SizedBox(
                   width: double.infinity,
                   child: TextButton(
-                      onPressed: () {},
+                      onPressed: () => controller.sendEmailVerification(),
                       child: Text(TTexts.resendEmail, style: TextStyle(color: dark ? TColors.dark: TColors.light),)))
             ],
           ),

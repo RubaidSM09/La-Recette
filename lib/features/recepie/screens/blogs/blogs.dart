@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:html' as html;
+// import 'dart:html' as html;
 
 class BlogPage extends StatefulWidget {
   const BlogPage({Key? key}) : super(key: key);
@@ -23,10 +23,10 @@ class _BlogPageState extends State<BlogPage> {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       final bytes = await pickedFile.readAsBytes();
-      final blob = html.Blob([bytes]);
-      final url = html.Url.createObjectUrlFromBlob(blob);
+      // final blob = html.Blob([bytes]);
+      // final url = html.Url.createObjectUrlFromBlob(blob);
       setState(() {
-        _imageFileUrl = url;
+        // _imageFileUrl = url;
         _videoFileUrl = null;
       });
     }
@@ -36,10 +36,10 @@ class _BlogPageState extends State<BlogPage> {
     final pickedFile = await _picker.pickVideo(source: ImageSource.gallery);
     if (pickedFile != null) {
       final bytes = await pickedFile.readAsBytes();
-      final blob = html.Blob([bytes]);
-      final url = html.Url.createObjectUrlFromBlob(blob);
+      // final blob = html.Blob([bytes]);
+      // final url = html.Url.createObjectUrlFromBlob(blob);
       setState(() {
-        _videoFileUrl = url;
+        // _videoFileUrl = url;
         _imageFileUrl = null;
       });
     }
