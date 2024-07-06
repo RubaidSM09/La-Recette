@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:t_store/data/repositories/authentication/authentication_repository.dart';
+import 'package:t_store/features/personalization/controllers/user_controller.dart';
 import 'package:t_store/features/personalization/screens/profile/profile.dart';
 import 'package:t_store/features/personalization/screens/settings/add-recipe/add_recipe.dart';
 // import 'package:t_store/common/widgets/custom_shapes/containers/primary_header_container.dart';
@@ -20,7 +21,8 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final auth= AuthenticationRepository.instance;
+    final controller = Get.put(UserController());
+    final auth = AuthenticationRepository.instance;
     return Scaffold(
       // body: SingleChildScrollView(
       //   child: Column(
@@ -111,10 +113,10 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              const Center(
+              Center(
                 child: Text(
-                  'Chowdhury Amanullah',
-                  style: TextStyle(
+                  controller.user.value.fullName,
+                  style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFFE85A4F),
@@ -122,10 +124,10 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              const Center(
+              Center(
                 child: Text(
-                  '@amanullah',
-                  style: TextStyle(
+                  controller.user.value.username,
+                  style: const TextStyle(
                     fontSize: 18,
                     color: Color(0xFF616161),
                   ),
