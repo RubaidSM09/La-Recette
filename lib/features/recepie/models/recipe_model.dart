@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:t_store/features/recepie/models/recipe_ingredients_model.dart';
 
 class RecipeModel {
   String id;
@@ -6,6 +7,11 @@ class RecipeModel {
   String chef;
   String time;
   String thumbnail;
+  double? ratings;
+  int? servings;
+  String? description;
+  String? direction;
+  List<RecipeIngredientModel>? ingredients;
 
   RecipeModel({
     required this.id,
@@ -13,6 +19,11 @@ class RecipeModel {
     required this.chef,
     required this.time,
     required this.thumbnail,
+    this.ratings,
+    this.servings,
+    this.description,
+    this.direction,
+    this.ingredients,
   });
 
   /// Create Empty func for clean code
@@ -25,6 +36,11 @@ class RecipeModel {
       'Chef': chef,
       'Time': time,
       'Image': thumbnail,
+      'Ratings': ratings,
+      'Servings': servings,
+      'Description': description,
+      'Directions': direction,
+      'Ingredients': ingredients != null ? ingredients!.map((e) => e.toJson()).toList() : [],
     };
   }
 
@@ -38,6 +54,11 @@ class RecipeModel {
       chef: data['Chef'],
       time: data['Time'] ?? '',
       thumbnail: data['Image'] ?? '',
+      ratings: data['Ratings'] ?? '',
+      servings: data['Servings'] ?? '',
+      description: data['Description'] ?? '',
+      direction: data['Directions'] ?? '',
+      ingredients: (data['Ingredients'] as List<dynamic>).map((e) => RecipeIngredientModel.fromJson(e)).toList(),
     );
   }
 
@@ -50,6 +71,11 @@ class RecipeModel {
       chef: data['Chef'] ?? '',
       time: data['Time'] ?? '',
       thumbnail: data['Image'] ?? '',
+      ratings: data['Ratings'] ?? '',
+      servings: data['Servings'] ?? '',
+      description: data['Description'] ?? '',
+      direction: data['Directions'] ?? '',
+      ingredients: (data['Ingredients'] as List<dynamic>).map((e) => RecipeIngredientModel.fromJson(e)).toList(),
     );
   }
 }

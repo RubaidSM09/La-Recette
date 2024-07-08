@@ -29,7 +29,7 @@ class TProductCardVertical extends StatelessWidget {
     final dark = THelperFunctions.isDarkMode(context);
 
     return GestureDetector(
-      onTap: () => Get.to(() => const RecipePage()),
+      onTap: () => Get.to(() => RecipePage(recipe: recipe,)),
       child: Container(
           width: 180,
           padding: const EdgeInsets.all(1),

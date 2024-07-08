@@ -6,12 +6,13 @@ version: 1.0.0+1
 environment:
   sdk: '>=3.0.5 <4.0.0'
 
-
-
 #--------------- PACKAGES ------------------#
 dependencies:
   flutter:
     sdk: flutter
+
+  # Potential alternative for JavaScript interop
+  js: ^0.6.4
 
   # Utility Packages
   http: ^1.1.0
@@ -38,10 +39,7 @@ dependencies:
   capped_progress_indicator: ^0.0.2
   image_picker: ^1.0.8
 
-
-
-  #--------------- ./ PACKAGES END ------------------#
-
+  # Additional Packages
   cached_network_image: ^3.3.1
   cloud_firestore: ^4.13.1
   firebase_storage: ^11.6.7
@@ -54,9 +52,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_lints: ^2.0.0
-
 
 flutter:
   uses-material-design: true

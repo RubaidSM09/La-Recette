@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:t_store/features/recepie/models/recipe_model.dart';
 
 class RecipePage extends StatelessWidget {
-  const RecipePage({super.key});
+  const RecipePage({super.key, required this.recipe});
+
+  final RecipeModel recipe;
 
   @override
   Widget build(BuildContext context) {
