@@ -6,6 +6,7 @@ import 'package:get/get_instance/get_instance.dart';
 import 'package:t_store/common/widgets/shimmers/vertical_product_shimmer.dart';
 
 import 'package:t_store/common/widgets/texts/section_heading.dart';
+import 'package:t_store/features/recepie/controllers/category_controller.dart';
 import 'package:t_store/features/recepie/controllers/recipe/recipe_controller.dart';
 
 import 'package:t_store/features/recepie/screens/home/widgets/home_appbar.dart';

@@ -26,21 +26,21 @@ class RecipePage extends StatelessWidget {
                   child: Container(
                     width: 360,
                     height: 244,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: NetworkImage('https://i0.wp.com/thenutritionadventure.com/wp-content/uploads/2017/07/PourHouseAmericanBurger.jpg?resize=5236%2C3490'),
+                        image: NetworkImage(recipe.thumbnail),
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
                 ),
                 // Title
-                const Positioned(
+                Positioned(
                   top: 257,
                   left: 12,
                   child: Text(
-                    'The Perfect Basic Burger',
-                    style: TextStyle(
+                    recipe.title,
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -50,12 +50,12 @@ class RecipePage extends StatelessWidget {
                   ),
                 ),
                 // Chef's name
-                const Positioned(
+                Positioned(
                   top: 280,
                   left: 12,
                   child: Text(
-                    'Chowdhury Amanullah',
-                    style: TextStyle(
+                    recipe.chef,
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.normal,
                       fontSize: 14,
@@ -69,12 +69,12 @@ class RecipePage extends StatelessWidget {
                   top: 300,
                   left: 12,
                   child: Row(
-                    children: const [
-                      Icon(Icons.timer, color: Color(0xFFFF7900), size: 12),
-                      SizedBox(width: 4),
+                    children: [
+                      const Icon(Icons.timer, color: Color(0xFFFF7900), size: 12),
+                      const SizedBox(width: 4),
                       Text(
-                        '20 mins',
-                        style: TextStyle(
+                        recipe.time,
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.normal,
                           fontSize: 9,
@@ -82,9 +82,9 @@ class RecipePage extends StatelessWidget {
                           color: Color(0xFF616161),
                         ),
                       ),
-                      SizedBox(width: 16),
-                      Icon(Icons.star, color: Color(0xFFFEA801), size: 12),
-                      SizedBox(width: 4),
+                      const SizedBox(width: 16),
+                      const Icon(Icons.star, color: Color(0xFFFEA801), size: 12),
+                      const SizedBox(width: 4),
                       Text(
                         '4.7',
                         style: TextStyle(

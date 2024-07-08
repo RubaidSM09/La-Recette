@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:t_store/features/shop/screens/home/widgets/home_appbar.dart';
+import 'package:t_store/features/recepie/screens/home/widgets/home_appbar.dart';
 import 'package:t_store/utils/constants/sizes.dart';
 
 class TCategoryShimmer extends StatelessWidget {
