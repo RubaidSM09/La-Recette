@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:t_store/common/widgets/appbar/appbar.dart';
+import 'package:t_store/common/widgets/custom_shapes/containers/search_container.dart';
+import 'package:t_store/features/personalization/screens/settings/settings.dart';
+import 'package:t_store/features/recepie/controllers/blog_controller.dart';
+import 'package:t_store/features/recepie/screens/blogs/add_blogs/add_blogs.dart';
 import 'package:t_store/features/recepie/screens/blogs/widgets/blogCard.dart';
+import 'package:t_store/utils/constants/colors.dart';
+import 'package:t_store/utils/constants/sizes.dart';
+import 'package:t_store/utils/helpers/helper_functions.dart';
 // import 'dart:html' as html;
 
-class BlogPage extends StatefulWidget {
+/*class BlogPage extends StatefulWidget {
   const BlogPage({Key? key}) : super(key: key);
 
   @override
@@ -217,18 +226,62 @@ class _BlogPageState extends State<BlogPage> {
                 },
               ),
             ),
-            /*ListView.builder(
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {},
-                    child: const BlogCard(),
-                  );
-                }
-            ),*/
           ],
         ),
       ),
     );
   }
+}*/
+
+class BlogPage extends StatelessWidget {
+  const BlogPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = THelperFunctions.isDarkMode(context);
+
+    final controller = Get.put(BlogController());
+
+    return Scaffold(
+      appBar: TAppBar(
+        title: Text('Blogs', style: Theme.of(context).textTheme.headlineMedium!.apply(color: dark ? TColors.dark : const Color(0xFFE85A4F))),
+      ),
+      floatingActionButton: FloatingActionButton(
+        elevation: 10,
+        backgroundColor: dark ? TColors.dark : const Color(0xFFE85A4F),
+        onPressed: () => Get.to(() => const AddBlogsScreen()),
+        child: Icon(Icons.add, color: dark ? TColors.light : TColors.dark,),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(top: TSizes.defaultSpace),
+          child: Column(
+            children: [
+              const TSearchContainer(text: 'Search Ingredients'),
+              const SizedBox(
+                height: TSizes.spaceBtwSections,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(TSizes.defaultSpace),
+                child: GridView.builder(
+                  itemCount: controller.allBlogs.length,
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 1,
+                    mainAxisExtent: 288,
+                    mainAxisSpacing: TSizes.gridViewSpacing,
+                    crossAxisSpacing: TSizes.gridViewSpacing,
+                  ),
+                  itemBuilder: (_, index) => BlogsCard(blog: controller.allBlogs[index]),
+                ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+  }
 }
+

@@ -6,12 +6,15 @@ import 'package:t_store/common/widgets/images/t_rounded_image.dart';
 import 'package:t_store/common/widgets/recepies/favourite_icon/favourite_icon.dart';
 import 'package:t_store/common/widgets/texts/product_title_text.dart';
 import 'package:t_store/common/widgets/texts/t_brand_title_text_with_verified_icon.dart';
+import 'package:t_store/features/recepie/models/blog_model.dart';
 import 'package:t_store/utils/constants/colors.dart';
 import 'package:t_store/utils/constants/sizes.dart';
 import 'package:t_store/utils/helpers/helper_functions.dart';
 
-class BlogCard extends StatelessWidget {
-  const BlogCard({super.key});
+class BlogsCard extends StatelessWidget {
+  const BlogsCard({super.key, required this.blog});
+
+  final BlogModel blog;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,7 @@ class BlogCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        width: 180,
+        width: 360,
         padding: const EdgeInsets.all(1),
         decoration: BoxDecoration(
           boxShadow: [TShadowStyle.verticalProductShadow],
@@ -38,7 +41,9 @@ class BlogCard extends StatelessWidget {
                   //thumbnail image
                   Center(
                     child: TRoundedImage(
-                      imageUrl: "assets/images/ingredients/eggs.png",
+                      width: 300,
+                      fit: BoxFit.cover,
+                      imageUrl: blog.image!.toString(),
                       applyImageRadius: true,
                       isNetworkImage: true,
                     ),
@@ -64,29 +69,32 @@ class BlogCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     //product name
-                    TProductTitleText(title: "Something", smallSize: false),
+                    TProductTitleText(title: blog.title, smallSize: false),
                     const SizedBox(height: TSizes.spaceBtwItems / 2),
-                    //brand name
-                    TBrandTitleWithVerifiedIcon(title: "recipe.chef", textColor: dark ? TColors.light : TColors.dark),
+                    //author name
+                    TBrandTitleWithVerifiedIcon(title: "by ${blog.author}", textColor: dark ? TColors.light : TColors.dark),
+                    const SizedBox(height: TSizes.spaceBtwItems / 2),
+                    //content
+                    TBrandTitleWithVerifiedIcon(title: blog.content, textColor: dark ? TColors.light : TColors.dark),
                   ],
                 ),
               ),
             ),
 
-            const Spacer(),
+            // const Spacer(),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Text(
-                    "recipe.time",
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                ),
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     Padding(
+            //       padding: const EdgeInsets.only(left: 8.0),
+            //       child: Text(
+            //         "recipe.time",
+            //         style: Theme.of(context).textTheme.headlineMedium,
+            //       ),
+            //     ),
+            //   ],
+            // ),
 
             // add to cart button
             // ProductcardAddToCartButton(product:product),
