@@ -86,8 +86,8 @@ class RecipePage extends StatelessWidget {
                       const Icon(Icons.star, color: Color(0xFFFEA801), size: 12),
                       const SizedBox(width: 4),
                       Text(
-                        '4.7',
-                        style: TextStyle(
+                        recipe.ratings.toString(),
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.normal,
                           fontSize: 9,
@@ -119,9 +119,9 @@ class RecipePage extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 4),
-                          const Text(
-                            '4',
-                            style: TextStyle(
+                          Text(
+                            recipe.servings.toString(),
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.normal,
                               fontSize: 12,
@@ -175,7 +175,7 @@ class RecipePage extends StatelessWidget {
                   left: 7,
                   child: Container(
                     width: 332,
-                    height: 98,
+                    // height: 98,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       boxShadow: [
@@ -191,7 +191,7 @@ class RecipePage extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'These burger patties are made with ground beef and an easy bread crumb mixture. Nothing beats a simple hamburger on a warm summer evening. Pile these burgers with your favorite condiments and pop open a cool drink!',
+                        recipe.description!.toString(),
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.normal,
@@ -238,15 +238,14 @@ class RecipePage extends StatelessWidget {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          buildIngredientRow('Fine dry bread crumbs', '1/2 cup'),
-                          buildIngredientRow('Salt', '1/2 tsp'),
-                          buildIngredientRow('Ground beef', '1 pound'),
-                          buildIngredientRow('Egg', '2 pcs'),
-                          buildIngredientRow('Pepper', '1/2 tsp'),
-                        ],
+                      child: ListView.builder(
+                        itemCount: recipe.ingredients?.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {},
+                            child: buildIngredientRow(recipe.ingredients![index].name.toString(), recipe.ingredients![index].quantity.toString()),
+                          );
+                        }
                       ),
                     ),
                   ),
@@ -271,7 +270,7 @@ class RecipePage extends StatelessWidget {
                   left: 12,
                   child: Container(
                     width: 330,
-                    height: 487,
+                    // height: 487,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       boxShadow: [
@@ -284,16 +283,11 @@ class RecipePage extends StatelessWidget {
                       ],
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        '1. Preheat an outdoor grill for high heat and lightly oil grate.\n'
-                            '2. Whisk together egg, salt, and pepper in a medium bowl.\n'
-                            '3. Add ground beef and bread crumbs and mix with your hands or a fork until well blended.\n'
-                            '4. Form into four 3/4-inch-thick patties.\n'
-                            '5. Place patties on the preheated grill. Cover and cook 6 to 8 minutes per side, or to desired doneness. An instant-read thermometer inserted into the center should read at least 160 degrees F (70 degrees C).\n'
-                            '6. Serve hot and enjoy!',
-                        style: TextStyle(
+                        recipe.direction!.toString(),
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.normal,
                           fontSize: 12,

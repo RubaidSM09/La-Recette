@@ -2,7 +2,10 @@ class RecipeIngredientModel {
   String? name;
   String? quantity;
 
-  RecipeIngredientModel({this.name, this.quantity});
+  RecipeIngredientModel({
+    this.name,
+    this.quantity,
+  });
 
   /// Json Format
   toJson() {
@@ -16,8 +19,8 @@ class RecipeIngredientModel {
     if (data.isEmpty) return RecipeIngredientModel();
 
     return RecipeIngredientModel(
-      name: data.containsKey('Name') ? data['Name'] : '',
-      quantity: data.containsKey('Quantity') ? data['Quantity'] : '',
+      name: data['Name'],
+      quantity: data['Quantity'],
     );
   }
 }

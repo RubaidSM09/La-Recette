@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:t_store/features/recepie/screens/blogs/widgets/blogCard.dart';
 // import 'dart:html' as html;
 
 class BlogPage extends StatefulWidget {
@@ -216,6 +217,15 @@ class _BlogPageState extends State<BlogPage> {
                 },
               ),
             ),
+            /*ListView.builder(
+                itemCount: 3,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {},
+                    child: const BlogCard(),
+                  );
+                }
+            ),*/
           ],
         ),
       ),
