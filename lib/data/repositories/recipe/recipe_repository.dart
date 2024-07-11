@@ -11,10 +11,24 @@ class RecipeRepository extends GetxController {
   /// Firestore instance for database interactions.
   final _db = FirebaseFirestore.instance;
 
-  /// Get all recipes
-  Future<List<RecipeModel>> getAllRecipes() async {
+  /// Get approved recipes
+  Future<List<RecipeModel>> getApprovedRecipes() async {
     try {
-      final snapshot = await _db.collection('recipe').get();
+      final snapshot = await _db.collection('recipe').where('IsPending', isEqualTo: false).get();
+      return snapshot.docs.map((e) => RecipeModel.fromSnapshot(e)).toList();
+    } on FirebaseException catch (e) {
+      throw TFirebaseException(e.code).message;
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
+  /// Get pending recipes
+  Future<List<RecipeModel>> getPendingRecipes() async {
+    try {
+      final snapshot = await _db.collection('recipe').where('IsPending', isEqualTo: true).get();
       return snapshot.docs.map((e) => RecipeModel.fromSnapshot(e)).toList();
     } on FirebaseException catch (e) {
       throw TFirebaseException(e.code).message;

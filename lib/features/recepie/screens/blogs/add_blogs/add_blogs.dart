@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:t_store/common/widgets/appbar/appbar.dart';
+import 'package:t_store/features/recepie/controllers/blog_controller.dart';
 import 'package:t_store/utils/constants/colors.dart';
 import 'package:t_store/utils/constants/image_strings.dart';
 import 'package:t_store/utils/constants/sizes.dart';
@@ -13,7 +14,9 @@ class AddBlogsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final BlogController controller = Get.put(BlogController());
     final dark = THelperFunctions.isDarkMode(context);
+
     return Scaffold(
       appBar: const TAppBar(
         title: Text("Add New Blog"),
@@ -36,27 +39,36 @@ class AddBlogsScreen extends StatelessWidget {
                         ),
                         child:ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: Center(
-                            child:
-                            // isNetworkImage
-                            // ? CachedNetworkImage(
-                            //   fit: fit,
-                            //   color: overlayColor,
-                            //   imageUrl: image,
-                            //   progressIndicatorBuilder: (context,url,downloadProcess) => const TShimmerEffect(width: 55, height: 55,radius: 55,),
-                            //   errorWidget: (context,url,error) => const Icon(Icons.error),
-                            // )
-                            //
-                            // :
-                            Image(
-                              fit: BoxFit.cover,
-                              image:  const AssetImage(TImages.addBlogImage),
-                              color: THelperFunctions.isDarkMode(context) ? TColors.dark : const Color(0xFFE85A4F),
-                            ) ,
+                          child: Obx(() {
+                            return Center(
+                              child: controller.image.value == null
+                              // isNetworkImage
+                              // ? CachedNetworkImage(
+                              //   fit: fit,
+                              //   color: overlayColor,
+                              //   imageUrl: image,
+                              //   progressIndicatorBuilder: (context,url,downloadProcess) => const TShimmerEffect(width: 55, height: 55,radius: 55,),
+                              //   errorWidget: (context,url,error) => const Icon(Icons.error),
+                              // )
+                              //
+                              // :
+                              ? Image(
+                                fit: BoxFit.cover,
+                                image: const AssetImage(TImages.addBlogImage),
+                                color: THelperFunctions.isDarkMode(context)
+                                    ? TColors.dark
+                                    : const Color(0xFFE85A4F),
+                              )
+                              : Image.file(
+                                controller.image.value!,
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }
                           ),
                         )
                     ),
-                    TextButton(onPressed: () {}, child: Text('+ Add Image', style: TextStyle(color: dark ? TColors.dark: const Color(0xFFE85A4F)),)),
+                    TextButton(onPressed: () => controller.pickImage(), child: Text('+ Add Image', style: TextStyle(color: dark ? TColors.dark: const Color(0xFFE85A4F)),)),
                   ],
                 ),
               ),
@@ -64,6 +76,7 @@ class AddBlogsScreen extends StatelessWidget {
 
               /// Name
               TextFormField(
+                style: TextStyle(color: dark ? TColors.dark : TColors.light),
                 decoration:  InputDecoration(
                     filled: true, // This makes the field background white
                     fillColor: dark ? const Color(0xFF3A3A3A) : Colors.white,
@@ -73,11 +86,13 @@ class AddBlogsScreen extends StatelessWidget {
                     ),
                     labelText: 'Title',
                     labelStyle: TextStyle(color: dark ? TColors.dark : const Color(0xFFE85A4F))),
+                onChanged: (value) => controller.blogTitle.value = value,
               ),
               const SizedBox(height: TSizes.spaceBtwInputFields,),
 
               /// Description
               TextFormField(
+                style: TextStyle(color: dark ? TColors.dark : TColors.light),
                 decoration: InputDecoration(
                   labelText: 'Content',
                   labelStyle: TextStyle(color: dark ? TColors.dark : const Color(0xFFE85A4F)),
@@ -88,11 +103,15 @@ class AddBlogsScreen extends StatelessWidget {
                     borderRadius: const BorderRadius.all(Radius.circular(12.0)),
                   ),
                 ),
+                onChanged: (value) => controller.blogContent.value = value,
               ),
               const SizedBox(height: TSizes.spaceBtwSections),
               ///Sign in button
               SizedBox(
-                  width: double.infinity, child: ElevatedButton(onPressed: () => Get.to(() => const NavigationMenu()), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE85A4F)), child: const Text('Publish Blog', style: TextStyle(color: TColors.dark),))
+                  width: double.infinity, child: ElevatedButton(onPressed: () {
+                    controller.submitBlog();
+                    Get.to(() => const NavigationMenu());
+              }, style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE85A4F)), child: const Text('Publish Blog', style: TextStyle(color: TColors.dark),))
               ),
             ],
           ),

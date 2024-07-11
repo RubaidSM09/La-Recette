@@ -25,11 +25,9 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
   Future<void> _pickImage() async {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
-      _controller.imageUrl.value = _image!.path;
+      _controller.image.value = File(pickedFile.path);
     }
+      // _controller.image.value = _image!.path;
   }
 
   @override
@@ -77,14 +75,14 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                       decoration: BoxDecoration(
                         color: const Color(0xFFD9D9D9),
                         borderRadius: BorderRadius.circular(10),
-                        image: _image != null
+                        image: _controller.image.value != null
                             ? DecorationImage(
-                          image: FileImage(_image!),
+                          image: FileImage(_controller.image.value!),
                           fit: BoxFit.cover,
                         )
                             : null,
                       ),
-                      child: _image == null
+                      child: _controller.image.value == null
                           ? Icon(Icons.add_a_photo, color: Color(0xFFE85A4F), size: 50)
                           : null,
                     ),
@@ -206,7 +204,7 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                             borderSide: BorderSide.none,
                           ),
                         ),
-                        onChanged: (value) => _controller.servings.value = value,
+                        onChanged: (value) => _controller.servings.value = int.parse(value),
                       ),
                     ),
                   ],

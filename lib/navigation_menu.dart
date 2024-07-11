@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:t_store/features/personalization/controllers/user_controller.dart';
+import 'package:t_store/features/personalization/screens/admin/admin_dashboard.dart';
 import 'package:t_store/features/recepie/screens/blogs/blogs.dart';
 import 'package:t_store/features/recepie/screens/home/home.dart';
 import 'package:t_store/features/recepie/screens/favourites/favourites.dart';
@@ -15,6 +17,7 @@ class NavigationMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userController = Get.put(UserController());
     final controller = Get.put(NavigationController());
     final darkMode = THelperFunctions.isDarkMode(context);
 
@@ -41,7 +44,14 @@ class NavigationMenu extends StatelessWidget {
           ],
         ),
       ),
-      body: Obx(() => controller.screens[controller.selectedIndex.value]),
+      body: Obx(() {
+        if(userController.user.value.fullName == "Admin LR") {
+          return controller.adminScreens[controller.selectedIndex.value];
+        }
+        else {
+          return controller.screens[controller.selectedIndex.value];
+        }
+      }),
     );
   }
 }
@@ -55,6 +65,14 @@ class NavigationController extends GetxController {
     const IngredientsScreen(),
     const FavouriteScreen(),
     const SettingsScreen(),
+  ];
+
+  final adminScreens = [
+    const HomeScreen(),
+    const BlogPage(),
+    const IngredientsScreen(),
+    const FavouriteScreen(),
+    const AdminDashboard(),
   ];
   // final screens = [Colors.red, Colors.green, Colors.blue, Colors.yellow,];
 }

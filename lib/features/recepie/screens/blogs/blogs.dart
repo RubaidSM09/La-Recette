@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:t_store/common/widgets/appbar/appbar.dart';
 import 'package:t_store/common/widgets/custom_shapes/containers/search_container.dart';
+import 'package:t_store/common/widgets/shimmers/vertical_product_shimmer.dart';
 import 'package:t_store/features/personalization/screens/settings/settings.dart';
 import 'package:t_store/features/recepie/controllers/blog_controller.dart';
 import 'package:t_store/features/recepie/screens/blogs/add_blogs/add_blogs.dart';
@@ -263,18 +264,27 @@ class BlogPage extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(TSizes.defaultSpace),
-                child: GridView.builder(
-                  itemCount: controller.allBlogs.length,
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1,
-                    mainAxisExtent: 288,
-                    mainAxisSpacing: TSizes.gridViewSpacing,
-                    crossAxisSpacing: TSizes.gridViewSpacing,
-                  ),
-                  itemBuilder: (_, index) => BlogsCard(blog: controller.allBlogs[index]),
+                child: Obx((){
+                  if(controller.isLoading.value) return const TVerticalProductShimmer();
+
+                  if(controller.approvedBlogs.isEmpty) {
+                    return Center(child: Text('No Data Found!', style: Theme.of(context).textTheme.bodyMedium));
+                  }
+                  return GridView.builder(
+                    itemCount: controller.approvedBlogs.length,
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 1,
+                      mainAxisExtent: 288,
+                      mainAxisSpacing: TSizes.gridViewSpacing,
+                      crossAxisSpacing: TSizes.gridViewSpacing,
+                    ),
+                    itemBuilder: (_, index) => BlogsCard(blog: controller.approvedBlogs[index]),
+                  );
+                }
+
                 ),
                 ),
               ],

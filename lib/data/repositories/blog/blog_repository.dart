@@ -11,10 +11,10 @@ class BlogRepository extends GetxController {
   /// Firestore instance for database interactions.
   final _db = FirebaseFirestore.instance;
 
-  /// Get all blogs
-  Future<List<BlogModel>> getAllBlogs() async {
+  /// Get approved blogs
+  Future<List<BlogModel>> getApprovedBlogs() async {
     try {
-      final snapshot = await _db.collection('Blogs').get();
+      final snapshot = await _db.collection('Blogs').where('IsPending', isEqualTo: false).get();
       return snapshot.docs.map((e) => BlogModel.fromSnapshot(e)).toList();
     } on FirebaseException catch (e) {
       throw TFirebaseException(e.code).message;
@@ -22,6 +22,62 @@ class BlogRepository extends GetxController {
       throw TPlatformException(e.code).message;
     } catch (e) {
       throw 'Something went wrong. Please try again';
+    }
+  }
+
+  /// Get pending blogs
+  Future<List<BlogModel>> getPendingBlogs() async {
+    try {
+      final snapshot = await _db.collection('Blogs').where('IsPending', isEqualTo: true).get();
+      return snapshot.docs.map((e) => BlogModel.fromSnapshot(e)).toList();
+    } on FirebaseException catch (e) {
+      throw TFirebaseException(e.code).message;
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
+  /// Add blog
+  Future<void> addBlog(String title, String author, String content, String? image) async {
+    try {
+      await _db.collection('Blogs').add({
+        'Title': title,
+        'Author': author,
+        'Content': content,
+        'Image': image,
+        'IsPending': true,
+      });
+    } on FirebaseException catch (e) {
+      throw TFirebaseException(e.code).message;
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
+  /// Approve Blog
+  Future<void> updateBlog(
+      String blogId,
+      ) async {
+    try {
+      await _db.collection('Blogs').doc(blogId).update({
+        'IsPending': false,
+      });
+    } catch (e) {
+      throw 'Error adding recipe: $e';
+    }
+  }
+
+  Future<void> deleteBlog(
+      String blogId,
+      ) async {
+    try {
+      await _db.collection('Blogs').doc(blogId).delete();
+    } catch (e) {
+      throw 'Error adding recipe: $e';
     }
   }
 }

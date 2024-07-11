@@ -86,12 +86,12 @@ class HomeScreen extends StatelessWidget {
                 child: Obx(() {
                   if(controller.isLoading.value) return const TVerticalProductShimmer();
 
-                  if(controller.allRecipes.isEmpty) {
+                  if(controller.approvedRecipes.isEmpty) {
                     return Center(child: Text('No Data Found!', style: Theme.of(context).textTheme.bodyMedium));
                   }
                   return TGridLayout(
-                      itemCount: controller.allRecipes.length,
-                      itemBuilder: (_, index) => TProductCardVertical(recipe: controller.allRecipes[index],));
+                      itemCount: controller.approvedRecipes.length,
+                      itemBuilder: (_, index) => TProductCardVertical(recipe: controller.approvedRecipes[index],));
                 }),
                 ),
             ],

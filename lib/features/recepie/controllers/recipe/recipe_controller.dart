@@ -8,24 +8,44 @@ class RecipeController extends GetxController {
 
   final isLoading = false.obs;
   final recipeRepository = Get.put(RecipeRepository());
-  RxList<RecipeModel> allRecipes = <RecipeModel>[].obs;
+  RxList<RecipeModel> approvedRecipes = <RecipeModel>[].obs;
+  RxList<RecipeModel> pendingRecipes = <RecipeModel>[].obs;
 
   @override
   void onInit() {
-    fetchAllRecipes();
+    fetchApprovedRecipes();
+    fetchPendingRecipes();
     super.onInit();
   }
 
-  void fetchAllRecipes() async {
+  void fetchApprovedRecipes() async {
     try {
       // Show loader while loading Recipes
       isLoading.value = true;
 
       // Fetch Recipes
-      final recipes = await recipeRepository.getAllRecipes();
+      final recipes = await recipeRepository.getApprovedRecipes();
 
       // Assign Recipes
-      allRecipes.assignAll(recipes);
+      approvedRecipes.assignAll(recipes);
+
+    } catch(e) {
+      TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void fetchPendingRecipes() async {
+    try {
+      // Show loader while loading Recipes
+      isLoading.value = true;
+
+      // Fetch Recipes
+      final recipes = await recipeRepository.getPendingRecipes();
+
+      // Assign Recipes
+      pendingRecipes.assignAll(recipes);
 
     } catch(e) {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
