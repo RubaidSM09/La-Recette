@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:t_store/common/widgets/shimmers/category_shimmer.dart';
 import 'package:t_store/common/widgets/shimmers/vertical_product_shimmer.dart';
 import 'package:t_store/features/recepie/controllers/category_controller.dart';
+import 'package:t_store/features/recepie/screens/category/category_page.dart';
 import 'package:t_store/utils/constants/colors.dart';
 import 'package:t_store/utils/helpers/helper_functions.dart';
 
@@ -34,10 +35,10 @@ class THomeCategories extends StatelessWidget {
           itemBuilder: (_, index) {
             final categoryController = controller.featuredCategories[index];
             return TVerticalImageText(
-              image: categoryController.image,
+              image: "assets/icons/categories/burger_icon.png",
               backgroundColor: dark ? TColors.dark : const Color(0xFFE98B80),
               title: categoryController.name,
-              onTap: ()=> {},
+              onTap: ()=> Get.to(CategorizedScreen(category: controller.allCategories[index])),
             );
           },
         ),

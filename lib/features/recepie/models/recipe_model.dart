@@ -11,6 +11,7 @@ class RecipeModel {
   int? servings;
   String? description;
   String? direction;
+  String category;
   List<RecipeIngredientModel>? ingredients;
 
   RecipeModel({
@@ -23,11 +24,12 @@ class RecipeModel {
     this.servings,
     this.description,
     this.direction,
+    required this.category,
     this.ingredients,
   });
 
   /// Create Empty func for clean code
-  static RecipeModel empty() => RecipeModel(id: '', title: '', chef: '', time: '', thumbnail: '');
+  static RecipeModel empty() => RecipeModel(id: '', title: '', chef: '', time: '', thumbnail: '', category: '');
 
   /// Json Format
   toJson() {
@@ -40,6 +42,7 @@ class RecipeModel {
       'Servings': servings,
       'Description': description,
       'Directions': direction,
+      'Category': category,
       'Ingredients': ingredients != null ? ingredients!.map((e) => e.toJson()).toList() : [],
     };
   }
@@ -58,6 +61,7 @@ class RecipeModel {
       servings: int.parse((data['Servings'] ?? 0.0).toString()),
       description: data['Description'] ?? '',
       direction: data['Directions'] ?? '',
+      category: data['Category'] ?? '',
       ingredients: (data['Ingredients'] as List<dynamic>).map((e) => RecipeIngredientModel.fromJson(e)).toList(),
     );
   }
@@ -75,6 +79,7 @@ class RecipeModel {
       servings: int.parse((data['Servings'] ?? 0.0).toString()),
       description: data['Description'] ?? '',
       direction: data['Directions'] ?? '',
+      category: data['Category'] ?? '',
       ingredients: (data['Ingredients'] as List<dynamic>).map((e) => RecipeIngredientModel.fromJson(e)).toList(),
     );
   }

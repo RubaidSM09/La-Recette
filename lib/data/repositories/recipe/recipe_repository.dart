@@ -52,4 +52,18 @@ class RecipeRepository extends GetxController {
       throw 'Something went wrong. Please try again';
     }
   }
+
+  /// Get categorized recipes
+  Future<List<RecipeModel>> getCategorizedRecipes(String category) async {
+    try {
+      final snapshot = await _db.collection('recipe').where('IsPending', isEqualTo: false).where('Category', isEqualTo: category).get();
+      return snapshot.docs.map((e) => RecipeModel.fromSnapshot(e)).toList();
+    } on FirebaseException catch (e) {
+      throw TFirebaseException(e.code).message;
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
 }

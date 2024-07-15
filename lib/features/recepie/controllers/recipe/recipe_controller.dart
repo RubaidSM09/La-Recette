@@ -10,6 +10,7 @@ class RecipeController extends GetxController {
   final recipeRepository = Get.put(RecipeRepository());
   RxList<RecipeModel> approvedRecipes = <RecipeModel>[].obs;
   RxList<RecipeModel> pendingRecipes = <RecipeModel>[].obs;
+  RxList<RecipeModel> categorizedRecipes = <RecipeModel>[].obs;
 
   @override
   void onInit() {
@@ -51,6 +52,18 @@ class RecipeController extends GetxController {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  /// -- Load selected category data
+  Future<List<RecipeModel>> fetchCategorizedRecipes(String category) async {
+    try{
+      final recipes = await RecipeRepository.instance.getCategorizedRecipes(category);
+      categorizedRecipes.assignAll(recipes);
+      return categorizedRecipes;
+    } catch (e) {
+      TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      return [];
     }
   }
 }
