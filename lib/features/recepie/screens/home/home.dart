@@ -22,6 +22,7 @@ import 'package:t_store/utils/helpers/helper_functions.dart';
 import '../../../../common/widgets/custom_shapes/containers/search_container.dart';
 import '../../../../common/widgets/layouts/grid_layout.dart';
 import '../../../../common/widgets/recepies/recepie_cards/product_card_vertical.dart';
+import 'package:t_store/features/recepie/controllers/recipe/reviews_ratings_controller.dart'; // Ensure the correct path
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -30,7 +31,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
 
-    final controller = Get.put(RecipeController());
+    final controller = Get.put(RecipeController());// Ensure RecipeController is defined
 
     return Scaffold(
       body: SingleChildScrollView(

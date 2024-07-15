@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:t_store/features/recepie/models/recipe_model.dart';
+import 'package:t_store/features/recepie/screens/reviews_ratings/reviews_ratings.dart';
 
 class RecipePage extends StatelessWidget {
   const RecipePage({super.key, required this.recipe});
@@ -28,9 +28,9 @@ class RecipePage extends StatelessWidget {
                     height: 244,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: NetworkImage(recipe.thumbnail),
-                        fit: BoxFit.cover,
-                      ),
+                         image: NetworkImage(recipe.thumbnail),
+                          fit: BoxFit.cover,
+                       ),
                     ),
                   ),
                 ),
@@ -146,7 +146,15 @@ class RecipePage extends StatelessWidget {
                           IconButton(
                             icon: const Icon(Icons.arrow_forward, size: 16),
                             onPressed: () {
-                              // Add your onPressed code here
+                              // Navigate to RatingsAndReviewsScreen
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => RatingsAndReviewsScreen(
+                                    recipeId: recipe.id,
+                                  ),
+                                ),
+                              );
                             },
                           ),
                         ],
@@ -154,7 +162,6 @@ class RecipePage extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 // Description Section
                 const Positioned(
                   top: 347,
@@ -241,11 +248,11 @@ class RecipePage extends StatelessWidget {
                       child: ListView.builder(
                         itemCount: recipe.ingredients?.length,
                         itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {},
-                            child: buildIngredientRow(recipe.ingredients![index].name.toString(), recipe.ingredients![index].quantity.toString()),
+                          return buildIngredientRow(
+                            recipe.ingredients![index].name.toString(),
+                            recipe.ingredients![index].quantity.toString(),
                           );
-                        }
+                        },
                       ),
                     ),
                   ),
@@ -317,7 +324,15 @@ class RecipePage extends StatelessWidget {
                       IconButton(
                         icon: const Icon(Icons.arrow_forward, size: 16),
                         onPressed: () {
-                          // Add your onPressed code here
+                          // Navigate to RatingsAndReviewsScreen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RatingsAndReviewsScreen(
+                                recipeId: recipe.id,
+                              ),
+                            ),
+                          );
                         },
                       ),
                     ],
