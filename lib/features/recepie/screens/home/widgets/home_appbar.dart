@@ -5,6 +5,7 @@ import 'package:t_store/utils/helpers/helper_functions.dart';
 import '../../../../../common/widgets/appbar/appbar.dart';
 import '../../../../../utils/constants/colors.dart';
 import '../../../../../utils/constants/text_strings.dart';
+import '../../notifications/notifications_icon.dart';
 
 
 class THomeAppBar extends StatelessWidget {
@@ -29,6 +30,14 @@ class THomeAppBar extends StatelessWidget {
           ),
         ],
       ),
+      actions: [
+        NotificationCounterIcon(
+          iconColor: dark ? TColors.dark : const Color(0xFFE85A4F),
+          counterBgColor: dark ? TColors.dark : const Color(0xFFE85A4F),
+          counterTextColor: dark ? TColors.light : TColors.dark,
+
+        ),
+      ],
     );
   }
 }
