@@ -9,7 +9,6 @@ import 'package:t_store/common/widgets/texts/t_brand_title_text_with_verified_ic
 import 'package:t_store/features/personalization/screens/admin/widgets/admin_blog_details.dart';
 import 'package:t_store/features/recepie/controllers/blog_controller.dart';
 import 'package:t_store/features/recepie/models/blog_model.dart';
-import 'package:t_store/features/recepie/screens/blogs/widgets/blogCard.dart';
 import 'package:t_store/utils/constants/colors.dart';
 import 'package:t_store/utils/constants/sizes.dart';
 import 'package:t_store/utils/helpers/helper_functions.dart';
@@ -27,7 +26,7 @@ class AdminPendingBlogList extends StatelessWidget {
         title: Text(
           'Pending Blogs',
           style: TextStyle(
-            color: dark ? TColors.dark : Color(0xFFE85A4F),
+            color: dark ? TColors.dark : const Color(0xFFE85A4F),
             fontWeight: FontWeight.bold,
           ),
         ),

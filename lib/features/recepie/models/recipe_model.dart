@@ -83,4 +83,22 @@ class RecipeModel {
       ingredients: (data['Ingredients'] as List<dynamic>).map((e) => RecipeIngredientModel.fromJson(e)).toList(),
     );
   }
+
+  factory RecipeModel.fromFirestore(DocumentSnapshot doc) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    // var ingredients = (data['Ingredients'] as List).map((item) => RecipeIngredientModel.fromMap(item)).toList();
+    return RecipeModel(
+      id: doc.id,
+      title: data['Title'],
+      chef: data['Chef'],
+      time: data['Time'] ?? '',
+      thumbnail: data['Image'] ?? '',
+      ratings: double.parse((data['Ratings'] ?? 0.0).toString()),
+      servings: int.parse((data['Servings'] ?? 0.0).toString()),
+      description: data['Description'] ?? '',
+      direction: data['Directions'] ?? '',
+      category: data['Category'] ?? '',
+      ingredients: (data['Ingredients'] as List).map((item) => RecipeIngredientModel.fromMap(item)).toList(),
+    );
+  }
 }

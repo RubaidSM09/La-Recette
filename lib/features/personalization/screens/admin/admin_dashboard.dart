@@ -35,7 +35,7 @@ class AdminDashboard extends StatelessWidget {
               Center(
                 child: Column(
                   children: [
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     TextButton(
                       onPressed: () => Get.to(() => const AdminPendingRecipeList()),
                       child: const TaskCard(
@@ -45,24 +45,24 @@ class AdminDashboard extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () => Get.to(() => const AdminPendingBlogList()),
-                      child: TaskCard(
+                      child: const TaskCard(
                         task: 'Pending Blog Approvals',
                         icon: Icons.pending,
                       ),
                     ),
-                    TaskCard(
+                    const TaskCard(
                       task: 'Manage Recipes',
                       icon: Icons.spoke_outlined,
                     ),
-                    TaskCard(
+                    const TaskCard(
                       task: 'Manage Blogs',
                       icon: Icons.newspaper,
                     ),
-                    TaskCard(
+                    const TaskCard(
                       task: 'Manage Users',
                       icon: Icons.supervised_user_circle,
                     ),
-                    TaskCard(
+                    const TaskCard(
                       task: 'Manage Ingredients',
                       icon: Icons.egg,
                     ),

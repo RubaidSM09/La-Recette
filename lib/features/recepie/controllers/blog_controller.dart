@@ -17,6 +17,7 @@ class BlogController extends GetxController {
   final blogRepository = Get.put(BlogRepository());
   RxList<BlogModel> approvedBlogs = <BlogModel>[].obs;
   RxList<BlogModel> pendingBlogs = <BlogModel>[].obs;
+  RxList<BlogModel> myBlogs = <BlogModel>[].obs;
 
   var blogId = ''.obs;
   var blogTitle = ''.obs;
@@ -129,6 +130,26 @@ class BlogController extends GetxController {
     } catch (e) {
       // Handle error (e.g., show an error message)
       print('Error submitting recipe: $e');
+    }
+  }
+
+  Future<List<BlogModel>> fetchMyBlogs(String chef) async {
+    try {
+      // Show loader while loading Recipes
+      isLoading.value = true;
+
+      // Fetch Recipes
+      final blogs = await blogRepository.getMyBlogs(chef);
+
+      // Assign Recipes
+      myBlogs.assignAll(blogs);
+      return myBlogs;
+
+    } catch(e) {
+      TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      return [];
+    } finally {
+      isLoading.value = false;
     }
   }
 }

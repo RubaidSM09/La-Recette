@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:t_store/common/widgets/recepies/recepie_cards/product_card_vertical.dart';
+import 'package:t_store/common/widgets/shimmers/vertical_product_shimmer.dart';
 import 'package:t_store/data/repositories/authentication/authentication_repository.dart';
 import 'package:t_store/features/personalization/controllers/user_controller.dart';
 import 'package:t_store/features/personalization/screens/profile/profile.dart';
+import 'package:t_store/features/recepie/controllers/blog_controller.dart';
+import 'package:t_store/features/recepie/controllers/recipe/recipe_controller.dart';
+import 'package:t_store/features/recepie/screens/blogs/widgets/blogCard.dart';
 import 'package:t_store/features/recepie/screens/recipe_details/addrecipe_ingredients.dart';
+import 'package:t_store/navigation_menu.dart';
+import 'package:t_store/utils/constants/colors.dart';
+import 'package:t_store/utils/constants/image_strings.dart';
+import 'package:t_store/utils/constants/sizes.dart';
+import 'package:t_store/utils/helpers/cloud_helper_functions.dart';
+import 'package:t_store/utils/helpers/helper_functions.dart';
+import 'package:t_store/utils/popups/animation_loader.dart';
 // import 'package:t_store/common/widgets/custom_shapes/containers/primary_header_container.dart';
 // import 'package:t_store/common/widgets/list_tiles/settings_menu_tile.dart';
 // import 'package:t_store/features/personalization/screens/address/address.dart';
@@ -21,7 +33,9 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(UserController());
+    final controller = UserController.instance;
+    final recipeController = RecipeController.instance;
+    final blogController = BlogController.instance;
     final auth = AuthenticationRepository.instance;
     return Scaffold(
       // body: SingleChildScrollView(
@@ -98,7 +112,7 @@ class SettingsScreen extends StatelessWidget {
 
       // body: Container(color: Colors.yellow,),
 
-      backgroundColor: const Color(0xFFEAE7DC),
+      backgroundColor: THelperFunctions.isDarkMode(context) ? TColors.light : const Color(0xFFEAE7DC),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(40.0),
@@ -127,23 +141,24 @@ class SettingsScreen extends StatelessWidget {
               Center(
                 child: Text(
                   controller.user.value.username,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
-                    color: Color(0xFF616161),
+                    color: THelperFunctions.isDarkMode(context) ? TColors.dark : const Color(0xFF616161),
                   ),
                 ),
               ),
               const SizedBox(height: 8),
-              const Center(
+              Center(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.star, color: Colors.amber),
-                    SizedBox(width: 4),
+                    const Icon(Icons.star, color: Colors.amber),
+                    const SizedBox(width: 4),
                     Text(
                       '4.67',
                       style: TextStyle(
                         fontSize: 18,
+                        color: THelperFunctions.isDarkMode(context) ? TColors.dark : const Color(0xFF616161),
                       ),
                     ),
                   ],
@@ -151,12 +166,13 @@ class SettingsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               const SizedBox(height: 8),
-              const Center(
+              Center(
                 child: Text(
                   'A 48-year old veteran chef',
                   style: TextStyle(
                     fontSize: 16,
                     fontStyle: FontStyle.italic,
+                    color: THelperFunctions.isDarkMode(context) ? TColors.dark : const Color(0xFF616161),
                   ),
                 ),
               ),
@@ -251,11 +267,12 @@ class SettingsScreen extends StatelessWidget {
               const SizedBox(height: 60),
               Row(
                 children: [
-                  const Text(
+                  Text(
                     'Your Recipes',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      color: THelperFunctions.isDarkMode(context) ? TColors.dark : const Color(0xFF616161),
                     ),
                   ),
                   const Spacer(),
@@ -274,37 +291,34 @@ class SettingsScreen extends StatelessWidget {
               const SizedBox(height: 16),
               SizedBox(
                 height: 640,
-                child: GridView.count(
-                  crossAxisCount: 2, // 2 columns
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 0.57,
-                  children: const [
-                    RecipeCard(
-                      title: 'Smashed Burger',
-                      imagePath: 'assets/images/profile_images/bburger_1.jpeg',
-                      rating: 4.97,
-                      servingTime: '45 mins',
-                    ),
-                    RecipeCard(
-                      title: 'Smashed Burger',
-                      imagePath: 'assets/images/profile_images/bburger_1.jpeg',
-                      rating: 4.97,
-                      servingTime: '45 mins',
-                    ),
-                    RecipeCard(
-                      title: 'Smashed Burger',
-                      imagePath: 'assets/images/profile_images/bburger_1.jpeg',
-                      rating: 4.97,
-                      servingTime: '45 mins',
-                    ),
-                    RecipeCard(
-                      title: 'Smashed Burger',
-                      imagePath: 'assets/images/profile_images/bburger_1.jpeg',
-                      rating: 4.97,
-                      servingTime: '45 mins',
-                    ),
-                  ],
+                child: FutureBuilder(
+                  future: recipeController.fetchMyRecipes(controller.user.value.fullName),
+                  builder: (context,snapshot) {
+                    final emptyWidget =TAnimationLoaderWidget(
+                      text: 'Whoops! Your Recipe is Empty...',
+                      animation:TImages.docerAnimation,
+                      //showAction:true,
+                      //actionText:'Let\'s add some',
+                      onActionPressed: () => Get.off(() => const NavigationMenu()) ,
+                    );
+
+                    const loader=TVerticalProductShimmer(itemCount: 6,);
+                    final widget = TCloudHelperFunctions.checkMultiRecordState(snapshot: snapshot,loader: loader,nothingFound: emptyWidget);
+                    if(widget!= null) return widget;
+
+                    final recipes =snapshot.data!;
+                    return GridView.builder(
+                        itemCount: recipes.length,
+                        shrinkWrap: true,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisExtent: 288,
+                          mainAxisSpacing: TSizes.gridViewSpacing,
+                          crossAxisSpacing: TSizes.gridViewSpacing,
+                        ),
+                        itemBuilder: (_, index) => TProductCardVertical(recipe: recipes[index],),
+                      );
+                  }
                 ),
               ),
               const SizedBox(
@@ -315,17 +329,18 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 40),
-              const Row(
+              Row(
                 children: [
                   Text(
                     'Your Blogs',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      color: THelperFunctions.isDarkMode(context) ? TColors.dark : const Color(0xFF616161),
                     ),
                   ),
-                  Spacer(),
-                  Text(
+                  const Spacer(),
+                  const Text(
                     '+ Add New',
                     style: TextStyle(
                       fontSize: 18,
@@ -337,27 +352,34 @@ class SettingsScreen extends StatelessWidget {
               const SizedBox(height: 16),
               SizedBox(
                 height: 390, // Adjust this height as needed
-                child: ListView(
-                  children: const [
-                    BlogCard(
-                      title: 'Gourmet: Hit or Miss?',
-                      imagePath: 'assets/images/profile_images/chef_2.jpeg',
-                      description:
-                          'This blog is all about gourmet foods. Preparing them can often be a challenge. It is either a hit or a miss. Have you ever wondered what makes your dish a hit?',
-                    ),
-                    BlogCard(
-                      title: 'Gourmet: Hit or Miss?',
-                      imagePath: 'assets/images/profile_images/chef_2.jpeg',
-                      description:
-                          'This blog is all about gourmet foods. Preparing them can often be a challenge. It is either a hit or a miss. Have you ever wondered what makes your dish a hit?',
-                    ),
-                    BlogCard(
-                      title: 'Gourmet: Hit or Miss?',
-                      imagePath: 'assets/images/profile_images/chef_2.jpeg',
-                      description:
-                          'This blog is all about gourmet foods. Preparing them can often be a challenge. It is either a hit or a miss. Have you ever wondered what makes your dish a hit?',
-                    ),
-                  ],
+                child: FutureBuilder(
+                    future: blogController.fetchMyBlogs(controller.user.value.fullName),
+                  builder: (context,snapshot) {
+                    final emptyWidget =TAnimationLoaderWidget(
+                      text: 'Whoops! Your Blog is Empty...',
+                      animation:TImages.docerAnimation,
+                      //showAction:true,
+                      //actionText:'Let\'s add some',
+                      onActionPressed: () => Get.off(() => const NavigationMenu()) ,
+                    );
+
+                    const loader=TVerticalProductShimmer(itemCount: 6,);
+                    final widget = TCloudHelperFunctions.checkMultiRecordState(snapshot: snapshot,loader: loader,nothingFound: emptyWidget);
+                    if(widget!= null) return widget;
+
+                    final blogs =snapshot.data!;
+                    return GridView.builder(
+                      itemCount: blogs.length,
+                      shrinkWrap: true,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 1,
+                        mainAxisExtent: 288,
+                        mainAxisSpacing: TSizes.gridViewSpacing,
+                        crossAxisSpacing: TSizes.gridViewSpacing,
+                      ),
+                      itemBuilder: (_, index) => BlogsCard(blog: blogs[index],),
+                    );
+                  }
                 ),
               ),
               const SizedBox(

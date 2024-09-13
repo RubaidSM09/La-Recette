@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:t_store/features/recepie/models/addrecipe_ingredients_model.dart';
-import 'package:t_store/features/recepie/models/addrecipe_model.dart';
 
 class AddIngredientsRepository {
   final _db = FirebaseFirestore.instance;
@@ -56,6 +55,19 @@ class AddIngredientsRepository {
       ) async {
     try {
       await _db.collection('recipe').doc(recipeId).delete();
+    } catch (e) {
+      throw 'Error adding recipe: $e';
+    }
+  }
+
+  Future<void> updateRatings(
+      String recipeId,
+      double avgRatings,
+      ) async {
+    try {
+      await _db.collection('recipe').doc(recipeId).update({
+        'Ratings': avgRatings,
+      });
     } catch (e) {
       throw 'Error adding recipe: $e';
     }

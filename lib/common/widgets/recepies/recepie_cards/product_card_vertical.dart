@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:t_store/common/widgets/recepies/favourite_icon/favourite_icon.dart';
-import 'package:t_store/features/recepie/controllers/recipe/recipe_controller.dart';
 import 'package:t_store/features/recepie/models/recipe_model.dart';
 import 'package:t_store/features/recepie/screens/recipe_details/recipe_details.dart';
 // import 'package:t_store/features/recepie/controllers/product/cart_controller.dart';
 // import 'package:t_store/features/recepie/controllers/product/product_controller.dart';
 // import 'package:t_store/features/recepie/models/product_model.dart';
-import 'package:t_store/utils/constants/image_strings.dart';
 
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
@@ -29,7 +27,7 @@ class TProductCardVertical extends StatelessWidget {
     final dark = THelperFunctions.isDarkMode(context);
 
     return GestureDetector(
-      onTap: () => Get.to(() => RecipePage(recipe: recipe,)),
+      onTap: () => Get.to(() => RecipePage(recipeId: recipe.id,)),
       child: Container(
           width: 180,
           padding: const EdgeInsets.all(1),

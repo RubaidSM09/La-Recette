@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:t_store/features/recepie/models/ingredient_model.dart';
-import 'package:t_store/features/recepie/screens/recipe_details/recipe_details.dart';
+import 'package:t_store/features/recepie/screens/ingredients/ingredients_details.dart';
 // import 'package:t_store/features/recepie/controllers/product/cart_controller.dart';
 // import 'package:t_store/features/recepie/controllers/product/product_controller.dart';
 // import 'package:t_store/features/recepie/models/product_model.dart';
-import 'package:t_store/utils/constants/image_strings.dart';
 
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
@@ -26,7 +25,7 @@ class TIngredientCardVertical extends StatelessWidget {
     final dark = THelperFunctions.isDarkMode(context);
 
     return GestureDetector(
-      // onTap: () => Get.to(() => const RecipePage()),
+      onTap: () => Get.to(() => IngredientsDetailsPage(ingredient: ingredient)),
       child: Container(
           width: 180,
           padding: const EdgeInsets.all(1),

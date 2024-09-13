@@ -1,12 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/get_instance.dart';
 import 'package:t_store/common/widgets/shimmers/vertical_product_shimmer.dart';
 
 import 'package:t_store/common/widgets/texts/section_heading.dart';
-import 'package:t_store/features/recepie/controllers/category_controller.dart';
 import 'package:t_store/features/recepie/controllers/recipe/recipe_controller.dart';
 
 import 'package:t_store/features/recepie/screens/home/widgets/home_appbar.dart';
@@ -22,7 +19,7 @@ import 'package:t_store/utils/helpers/helper_functions.dart';
 import '../../../../common/widgets/custom_shapes/containers/search_container.dart';
 import '../../../../common/widgets/layouts/grid_layout.dart';
 import '../../../../common/widgets/recepies/recepie_cards/product_card_vertical.dart';
-import 'package:t_store/features/recepie/controllers/recipe/reviews_ratings_controller.dart'; // Ensure the correct path
+// Ensure the correct path
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -31,7 +28,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
 
-    final controller = Get.put(RecipeController());// Ensure RecipeController is defined
+    final controller = RecipeController.instance;// Ensure RecipeController is defined
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -85,6 +82,7 @@ class HomeScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(TSizes.defaultSpace),
                 child: Obx(() {
+                  print(controller.isLoading.value);
                   if(controller.isLoading.value) return const TVerticalProductShimmer();
 
                   if(controller.approvedRecipes.isEmpty) {

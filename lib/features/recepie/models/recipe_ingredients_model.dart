@@ -23,4 +23,11 @@ class RecipeIngredientModel {
       quantity: data['Quantity'],
     );
   }
+
+  factory RecipeIngredientModel.fromMap(Map<String, dynamic> data) {
+    return RecipeIngredientModel(
+      name: data['Name'] ?? '',
+      quantity: data['Quantity'] ?? '',
+    );
+  }
 }

@@ -4,11 +4,13 @@ class IngredientModel {
   String id;
   String title;
   String thumbnail;
+  String? description;
   
   IngredientModel({
     required this.id,
     required this.title,
     required this.thumbnail,
+    this.description,
   });
 
   /// Create Empty func for clean code
@@ -19,6 +21,7 @@ class IngredientModel {
     return {
       'Title': title,
       'Thumbnail': thumbnail,
+      'Description': description,
     };
   }
 
@@ -30,6 +33,7 @@ class IngredientModel {
       id: document.id,
       title: data['Title'],
       thumbnail: data['Thumbnail'] ?? '',
+      description: data['Description'] ?? '',
     );
   }
 
@@ -40,6 +44,7 @@ class IngredientModel {
       id: document.id,
       title: data['Title'] ?? '',
       thumbnail: data['Thumbnail'] ?? '',
+      description: data['Description'] ?? '',
     );
   }
 }

@@ -83,7 +83,7 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                             : null,
                       ),
                       child: _controller.image.value == null
-                          ? Icon(Icons.add_a_photo, color: Color(0xFFE85A4F), size: 50)
+                          ? const Icon(Icons.add_a_photo, color: Color(0xFFE85A4F), size: 50)
                           : null,
                     ),
                   ),
@@ -93,12 +93,12 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                   child: ElevatedButton(
                     onPressed: _pickImage,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFE85A4F),
+                      backgroundColor: const Color(0xFFE85A4F),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       '+ Add Image',
                       style: TextStyle(
                         fontFamily: 'Poppins',
@@ -114,7 +114,7 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                   decoration: InputDecoration(
                     labelText: 'Name of the Recipe',
                     filled: true,
-                    fillColor: Color(0xFFF5F5F5),
+                    fillColor: const Color(0xFFF5F5F5),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5),
                       borderSide: BorderSide.none,
@@ -122,8 +122,8 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                   ),
                   onChanged: (value) => _controller.recipeName.value = value,
                 ),
-                SizedBox(height: 16),
-                Text(
+                const SizedBox(height: 16),
+                const Text(
                   'Cooking Time',
                   style: TextStyle(
                     fontFamily: 'Poppins',
@@ -132,14 +132,14 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                     color: Color(0xFF565555),
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Row(
                   children: [
                     Expanded(
                       child: TextField(
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: Color(0xFFF5F5F5),
+                          fillColor: const Color(0xFFF5F5F5),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
                             borderSide: BorderSide.none,
@@ -151,8 +151,8 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                         onChanged: (value) => _controller.cookingTimeHours.value = value,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
                         ':',
                         style: TextStyle(
@@ -167,7 +167,7 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                       child: TextField(
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: Color(0xFFF5F5F5),
+                          fillColor: const Color(0xFFF5F5F5),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
                             borderSide: BorderSide.none,
@@ -181,8 +181,8 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
-                Text(
+                const SizedBox(height: 16),
+                const Text(
                   'Servings:',
                   style: TextStyle(
                     fontFamily: 'Poppins',
@@ -191,14 +191,14 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                     color: Color(0xFF565555),
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Row(
                   children: [
                     Expanded(
                       child: TextField(
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: Color(0xFFF5F5F5),
+                          fillColor: const Color(0xFFF5F5F5),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
                             borderSide: BorderSide.none,
@@ -209,8 +209,8 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
-                Text(
+                const SizedBox(height: 16),
+                const Text(
                   'Category:',
                   style: TextStyle(
                     fontFamily: 'Poppins',
@@ -219,14 +219,14 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                     color: Color(0xFF565555),
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Row(
                   children: [
                     Expanded(
                       child: DropdownButtonFormField<String>(
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: Color(0xFFE85A4F),
+                          fillColor: const Color(0xFFE85A4F),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
                             borderSide: BorderSide.none,
@@ -242,13 +242,13 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                         onChanged: (newValue) {
                           _controller.category.value = newValue!;
                         },
-                        hint: Text('Category'),
+                        hint: const Text('Category'),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
-                Text(
+                const SizedBox(height: 16),
+                const Text(
                   'Description:',
                   style: TextStyle(
                     fontFamily: 'Poppins',
@@ -257,12 +257,12 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                     color: Color(0xFF565555),
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 TextField(
                   maxLines: 5,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Color(0xFFF5F5F5),
+                    fillColor: const Color(0xFFF5F5F5),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5),
                       borderSide: BorderSide.none,
@@ -270,8 +270,8 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                   ),
                   onChanged: (value) => _controller.description.value = value,
                 ),
-                SizedBox(height: 16),
-                Text(
+                const SizedBox(height: 16),
+                const Text(
                   'Ingredients',
                   style: TextStyle(
                     fontFamily: 'Poppins',
@@ -280,7 +280,7 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                     color: Color(0xFF565555),
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Obx(
                       () => Column(
                     children: _controller.ingredients
@@ -292,7 +292,7 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                             child: TextField(
                               decoration: InputDecoration(
                                 filled: true,
-                                fillColor: Color(0xFFF5F5F5),
+                                fillColor: const Color(0xFFF5F5F5),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(5),
                                   borderSide: BorderSide.none,
@@ -302,12 +302,12 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                               onChanged: (value) => ingredient.name.value = value,
                             ),
                           ),
-                          SizedBox(width: 16),
+                          const SizedBox(width: 16),
                           Expanded(
                             child: TextField(
                               decoration: InputDecoration(
                                 filled: true,
-                                fillColor: Color(0xFFF5F5F5),
+                                fillColor: const Color(0xFFF5F5F5),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(5),
                                   borderSide: BorderSide.none,
@@ -323,20 +323,20 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                         .toList(),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Center(
                   child: ElevatedButton(
                     onPressed: _controller.addIngredient,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
-                      shape: CircleBorder(),
-                      padding: EdgeInsets.all(16),
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(16),
                     ),
-                    child: Icon(Icons.add, color: Colors.white),
+                    child: const Icon(Icons.add, color: Colors.white),
                   ),
                 ),
-                SizedBox(height: 16),
-                Text(
+                const SizedBox(height: 16),
+                const Text(
                   'Procedure',
                   style: TextStyle(
                     fontFamily: 'Poppins',
@@ -345,12 +345,12 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                     color: Color(0xFF565555),
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 TextField(
                   maxLines: 5,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Color(0xFFF5F5F5),
+                    fillColor: const Color(0xFFF5F5F5),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5),
                       borderSide: BorderSide.none,
@@ -358,7 +358,7 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                   ),
                   onChanged: (value) => _controller.procedure.value = value,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
@@ -370,12 +370,12 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
-                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 32),
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 32),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Request Approval',
                       style: TextStyle(
                         fontFamily: 'Poppins',

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:t_store/features/personalization/screens/admin/widgets/pending_recipe.dart';
 import 'package:t_store/features/recepie/controllers/recipe/addrecipe_ingredients_controller.dart';
 import 'package:t_store/features/recepie/models/recipe_model.dart';
 import 'package:t_store/navigation_menu.dart';
 import 'package:t_store/utils/constants/colors.dart';
 import 'package:t_store/utils/constants/sizes.dart';
-import 'package:t_store/utils/constants/text_strings.dart';
 import 'package:t_store/utils/helpers/helper_functions.dart';
 
 class AdminRecipePage extends StatelessWidget {

@@ -23,7 +23,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -46,31 +49,20 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAIzzBJiP51hrIR1FleTmNkLCdCO3ytggg',
-    appId: '1:712834459798:android:745f1e87daec3b3520fab7',
-    messagingSenderId: '712834459798',
-    projectId: 'la-recette-28025',
-    storageBucket: 'la-recette-28025.appspot.com',
-  );
-
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCCdtEeHpzL-sWI_y8BwC6KqLiEnrogUF0',
-    appId: '1:712834459798:web:6053a78e4ce2917320fab7',
-    messagingSenderId: '712834459798',
-    projectId: 'la-recette-28025',
-    authDomain: 'la-recette-28025.firebaseapp.com',
-    storageBucket: 'la-recette-28025.appspot.com',
+    apiKey: 'AIzaSyAIbxssglHu4mlR1CiERuv4X_-Btylwooc',
+    appId: '1:351165188555:web:e11b0d1807006dd28a4e4e',
+    messagingSenderId: '351165188555',
+    projectId: 'la-recette-35bc0',
+    authDomain: 'la-recette-35bc0.firebaseapp.com',
+    storageBucket: 'la-recette-35bc0.appspot.com',
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD115MRdKSnmvNJoZlM1o3VrqgSANebD5I',
-    appId: '1:712834459798:ios:d5aac6a3609caa5120fab7',
-    messagingSenderId: '712834459798',
-    projectId: 'la-recette-28025',
-    storageBucket: 'la-recette-28025.appspot.com',
-    iosClientId: '712834459798-38ge15f26ho4o6jdoo49bjknn4e0begi.apps.googleusercontent.com',
-    iosBundleId: 'com.example.tStore',
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyCmuRP_R79lHfjqVpsvyDopiI759kUluMs',
+    appId: '1:351165188555:android:10dff76b1b9b60e28a4e4e',
+    messagingSenderId: '351165188555',
+    projectId: 'la-recette-35bc0',
+    storageBucket: 'la-recette-35bc0.appspot.com',
   );
-
 }

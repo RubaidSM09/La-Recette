@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:t_store/common/widgets/appbar/appbar.dart';
 import 'package:t_store/common/widgets/custom_shapes/containers/search_container.dart';
 import 'package:t_store/common/widgets/shimmers/vertical_product_shimmer.dart';
-import 'package:t_store/features/personalization/screens/settings/settings.dart';
 import 'package:t_store/features/recepie/controllers/blog_controller.dart';
 import 'package:t_store/features/recepie/screens/blogs/add_blogs/add_blogs.dart';
 import 'package:t_store/features/recepie/screens/blogs/widgets/blogCard.dart';
@@ -241,7 +239,7 @@ class BlogPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
 
-    final controller = Get.put(BlogController());
+    final controller = BlogController.instance;
 
     return Scaffold(
       appBar: TAppBar(

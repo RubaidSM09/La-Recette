@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ConfirmationPage extends StatelessWidget {
+  const ConfirmationPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,7 +14,7 @@ class ConfirmationPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'Thank you for sharing your recipe',
                   style: TextStyle(
                     fontFamily: 'Poppins',
@@ -22,8 +24,8 @@ class ConfirmationPage extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 16),
-                Text(
+                const SizedBox(height: 16),
+                const Text(
                   'It is forwarded to Admin for approval',
                   style: TextStyle(
                     fontFamily: 'Poppins',
@@ -33,19 +35,19 @@ class ConfirmationPage extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Okay',
                     style: TextStyle(
                       fontFamily: 'Poppins',

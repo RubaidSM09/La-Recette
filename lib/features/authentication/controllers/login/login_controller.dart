@@ -31,7 +31,7 @@ class LoginController extends GetxController {
 
   ///Email and Password SignIn
   Future<void> emailAndPasswordSignIn() async {
-    print('Ok');
+
     try {
       // Start Loading
       TFullScreenLoader.openLoadingDialog('Logging you in...', TImages.docerAnimation);
@@ -60,6 +60,8 @@ class LoginController extends GetxController {
 
       // Remove Loader
       TFullScreenLoader.stopLoading();
+
+      await userController.fetchUserRecord();
 
       // Redirect
       AuthenticationRepository.instance.screenRedirect();

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:t_store/common/styles/shadow_styles.dart';
 import 'package:t_store/common/widgets/custom_shapes/containers/rounded_container.dart';
 import 'package:t_store/common/widgets/images/t_rounded_image.dart';
-import 'package:t_store/common/widgets/recepies/favourite_icon/favourite_icon.dart';
 import 'package:t_store/common/widgets/texts/product_title_text.dart';
 import 'package:t_store/common/widgets/texts/t_brand_title_text_with_verified_icon.dart';
 import 'package:t_store/features/recepie/models/blog_model.dart';

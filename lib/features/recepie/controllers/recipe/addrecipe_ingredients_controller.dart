@@ -4,7 +4,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:t_store/features/personalization/controllers/user_controller.dart';
 import 'package:t_store/features/recepie/models/addrecipe_ingredients_model.dart';
-import 'package:t_store/lib/data/repositories/recipe/add_ingredients_repository.dart';
 import 'package:t_store/data/repositories/recipe/addrecipe_ingredients_repository.dart';
 class AddIngredientsController extends GetxController {
   final AddIngredientsRepository _repository = AddIngredientsRepository();

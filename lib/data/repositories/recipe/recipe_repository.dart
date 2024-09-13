@@ -66,4 +66,38 @@ class RecipeRepository extends GetxController {
       throw 'Something went wrong. Please try again';
     }
   }
+
+  /// Get recipes according to ingredients
+  Future<List<RecipeModel>> getRecipesByIngredients(String ingredient) async {
+    try {
+      final snapshot = await _db.collection('recipe').get();
+      List<QueryDocumentSnapshot> filteredDocs = snapshot.docs.where((doc) {
+        List<dynamic> ingredients = doc['Ingredients'];
+        return ingredients.any((item) =>
+        item['Name'].toString().toLowerCase() == ingredient.toLowerCase());
+      }).toList();
+      print(filteredDocs.map((doc) => RecipeModel.fromFirestore(doc)).toList().length);
+      return filteredDocs.map((doc) => RecipeModel.fromFirestore(doc)).toList();
+    } on FirebaseException catch (e) {
+      throw TFirebaseException(e.code).message;
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
+  /// Get my recipes
+  Future<List<RecipeModel>> getMyRecipes(String chef) async {
+    try {
+      final snapshot = await _db.collection('recipe').where('IsPending', isEqualTo: false).where('Chef', isEqualTo: chef).get();
+      return snapshot.docs.map((e) => RecipeModel.fromSnapshot(e)).toList();
+    } on FirebaseException catch (e) {
+      throw TFirebaseException(e.code).message;
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
 }

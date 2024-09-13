@@ -1,168 +1,110 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:t_store/features/recepie/models/review_model.dart';
+import 'package:t_store/common/widgets/loader/loaders.dart';
+import 'package:t_store/data/repositories/recipe/addrecipe_ingredients_repository.dart';
 import 'package:t_store/data/repositories/recipe/reviews_ratings_repository.dart';
+import 'package:t_store/features/personalization/controllers/user_controller.dart';
+import 'package:t_store/features/recepie/models/recipe_review_rating_model.dart';
+import 'package:t_store/utils/constants/image_strings.dart';
+import 'package:t_store/utils/helpers/network_manager.dart';
+import 'package:t_store/utils/popups/full_screen_loader.dart';
 
 class ReviewsRatingsController extends GetxController {
-  final String recipeId;
-  var reviews = <RatingReviewModel>[].obs;
-  var isLoading = true.obs;
-  final ratingController = TextEditingController();
+  static ReviewsRatingsController get instance => Get.find();
+  final controller = Get.put(UserController());
+  var isLoading = false.obs;
+
   final reviewController = TextEditingController();
+  final ratingController = TextEditingController();
+  var recipeId = ''.obs;
+  GlobalKey<FormState> reviewRatingFormKey = GlobalKey<FormState>();
 
-  ReviewsRatingsController(this.recipeId) {
-    fetchReviews();
+  RxBool refreshData = true.obs;
+  final reviewRatingRepository = Get.put(ReviewsRatingsRepository());
+  final addRecipeIngredientRepository = Get.put(AddIngredientsRepository());
+
+  /// Fetch all user specific addresses
+  Future<List<RecipeReviewRatingModel>> getAllUserReviews(String id) async {
+    try {
+      recipeId.value = id;
+      final reviews = await reviewRatingRepository.fetchUserReviews(recipeId.value);
+      return reviews;
+    } catch (e) {
+      TLoaders.errorSnackBar(title: 'Address not found', message: e.toString());
+      return [];
+    }
   }
 
-  Future<void> fetchReviews() async {
+  /// Add new Address
+  Future addReviewsRatings() async {
     try {
-      print("Fetching reviews for recipeId: $recipeId");
-      reviews.value = await ReviewsRatingsRepository().fetchReviews(recipeId);
-      print("Fetched reviews: ${reviews.length}");
-      for (var review in reviews) {
-        print("Review: ${review.username}, ${review.review}, ${review.rating}");
+      // Start Loading
+      TFullScreenLoader.openLoadingDialog('Starting Address...', TImages.docerAnimation);
+
+      // Check Internet Connectivity
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        TFullScreenLoader.stopLoading();
+        return;
       }
+
+      // Form Validation
+      if (!reviewRatingFormKey.currentState!.validate()){
+        TFullScreenLoader.stopLoading();
+        return;
+      }
+
+      // Save Address Data
+      final reviewRating = RecipeReviewRatingModel(
+        id: '',
+        rating: double.parse(ratingController.text.trim()),
+        review: reviewController.text.trim(),
+        username: controller.user.value.username,
+      );
+      print('Ok');
+      await reviewRatingRepository.addReviewRating(reviewRating, recipeId.value);
+      updateRatings(recipeId.value);
+
+      // Remove Loader
+      TFullScreenLoader.stopLoading();
+
+      // Show Success Message
+      TLoaders.successSnackBar(title: 'Congratulations', message: 'Your address has been saved successfully.');
+
+      // Refresh Addresses Data
+      refreshData.toggle();
+
+      // Reset fields
+      resetFormFields();
+
+      // Redirect
+      Navigator.of(Get.context!).pop();
     } catch (e) {
-      print('Error fetching reviews: $e');
-    } finally {
-      isLoading.value = false;
+      // Remove Loader
+      TFullScreenLoader.stopLoading();
+      TLoaders.errorSnackBar(title: 'Address not found', message: e.toString());
     }
   }
 
-  Future<void> submitRating(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String username = prefs.getString('username') ?? 'Anonymous';
-
-    double rating = double.tryParse(ratingController.text) ?? 0;
-    String reviewText = reviewController.text;
-
-    if (rating <= 0 || reviewText.isEmpty) {
-      _showErrorDialog(context, 'Please provide a valid rating and review');
-      return;
-    }
-
+  /// Fetch all user specific addresses
+  void updateRatings(String id) async {
     try {
-      await ReviewsRatingsRepository().submitReview(recipeId, rating, reviewText, username);
-      fetchReviews();
-      _showThankYouDialog(context, 'Thank you for rating our recipe');
+      recipeId.value = id;
+      final reviews = await reviewRatingRepository.fetchUserReviews(recipeId.value);
+      double avgRatings=0;
+      for(int i=0;i<reviews.length;i++){
+        avgRatings+=reviews[i].rating;
+      }
+      avgRatings=avgRatings/reviews.length;
+      await addRecipeIngredientRepository.updateRatings(recipeId.value, avgRatings);
     } catch (e) {
-      print('Error submitting rating: $e');
-      _showErrorDialog(context, 'Error submitting rating');
+      TLoaders.errorSnackBar(title: 'Address not found', message: e.toString());
     }
   }
 
-  Future<void> submitReview(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String username = prefs.getString('username') ?? 'Anonymous';
-
-    double rating = double.tryParse(ratingController.text) ?? 0;
-    String reviewText = reviewController.text;
-
-    if (rating <= 0 || reviewText.isEmpty) {
-      _showErrorDialog(context, 'Please provide a valid rating and review');
-      return;
-    }
-
-    try {
-      await ReviewsRatingsRepository().submitReview(recipeId, rating, reviewText, username);
-      fetchReviews();
-      _showThankYouDialog(context, 'Thank you for giving your valuable review');
-    } catch (e) {
-      print('Error submitting review: $e');
-      _showErrorDialog(context, 'Error submitting review');
-    }
-  }
-
-  void _showThankYouDialog(BuildContext context, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          title: Text(
-            message,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w700,
-              fontSize: 16,
-              color: Color(0xFF616161),
-            ),
-          ),
-          actions: [
-            Center(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  'Done',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                    color: Color(0xFFE85A4F),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showErrorDialog(BuildContext context, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          title: Text(
-            'Error',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w700,
-              fontSize: 16,
-              color: Color(0xFF616161),
-            ),
-          ),
-          content: Text(
-            message,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
-              fontSize: 14,
-              color: Color(0xFF616161),
-            ),
-          ),
-          actions: [
-            Center(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  'Close',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                    color: Color(0xFFE85A4F),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
+  /// Function to reset form fields
+  void resetFormFields() {
+    ratingController.clear();
+    reviewController.clear();
   }
 }

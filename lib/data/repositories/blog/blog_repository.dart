@@ -80,4 +80,18 @@ class BlogRepository extends GetxController {
       throw 'Error adding recipe: $e';
     }
   }
+
+  /// Get my blogs
+  Future<List<BlogModel>> getMyBlogs(String author) async {
+    try {
+      final snapshot = await _db.collection('Blogs').where('IsPending', isEqualTo: false).where('Author', isEqualTo: author).get();
+      return snapshot.docs.map((e) => BlogModel.fromSnapshot(e)).toList();
+    } on FirebaseException catch (e) {
+      throw TFirebaseException(e.code).message;
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
 }

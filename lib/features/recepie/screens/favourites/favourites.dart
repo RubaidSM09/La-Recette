@@ -4,7 +4,6 @@ import 'package:t_store/common/widgets/layouts/grid_layout.dart';
 import 'package:t_store/common/widgets/recepies/recepie_cards/product_card_vertical.dart';
 import 'package:t_store/common/widgets/shimmers/vertical_product_shimmer.dart';
 import 'package:t_store/features/recepie/controllers/recipe/favourites_controller.dart';
-import 'package:t_store/features/recepie/controllers/recipe/recipe_controller.dart';
 import 'package:t_store/features/recepie/screens/home/home.dart';
 import 'package:t_store/navigation_menu.dart';
 import 'package:t_store/utils/constants/colors.dart';
