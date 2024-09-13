@@ -17,6 +17,9 @@ class RecipeController extends GetxController {
   RxList<RecipeModel> recipesByIngredient = <RecipeModel>[].obs;
   RxList<RecipeModel> myRecipes = <RecipeModel>[].obs;
 
+  // Add filtered recipes to display filtered results
+  RxList<RecipeModel> filteredRecipes = <RecipeModel>[].obs;
+
   @override
   void onInit() {
     fetchApprovedRecipes();
@@ -36,7 +39,10 @@ class RecipeController extends GetxController {
       // Assign Recipes
       approvedRecipes.assignAll(recipes);
 
-    } catch(e) {
+      // By default, filteredRecipes should have all approvedRecipes initially
+      filteredRecipes.assignAll(approvedRecipes);
+
+    } catch (e) {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
     } finally {
       isLoading.value = false;
@@ -54,7 +60,7 @@ class RecipeController extends GetxController {
       // Assign Recipes
       pendingRecipes.assignAll(recipes);
 
-    } catch(e) {
+    } catch (e) {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
     } finally {
       isLoading.value = false;
@@ -63,7 +69,7 @@ class RecipeController extends GetxController {
 
   /// -- Load selected category data
   Future<List<RecipeModel>> fetchCategorizedRecipes(String category) async {
-    try{
+    try {
       final recipes = await RecipeRepository.instance.getCategorizedRecipes(category);
       categorizedRecipes.assignAll(recipes);
       return categorizedRecipes;
@@ -75,7 +81,7 @@ class RecipeController extends GetxController {
 
   /// -- Load recipe according to ingredient
   Future<List<RecipeModel>> fetchRecipesByIngredient(String ingredient) async {
-    try{
+    try {
       final recipes = await RecipeRepository.instance.getRecipesByIngredients(ingredient);
       recipesByIngredient.assignAll(recipes);
       return recipesByIngredient;
@@ -97,11 +103,26 @@ class RecipeController extends GetxController {
       myRecipes.assignAll(recipes);
       return myRecipes;
 
-    } catch(e) {
+    } catch (e) {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
       return [];
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  /// -- Search recipes by Title or Chef
+  void searchRecipes(String query) {
+    if (query.isEmpty) {
+      // If search query is empty, reset the filtered recipes to all approved recipes
+      filteredRecipes.assignAll(approvedRecipes);
+    } else {
+      filteredRecipes.assignAll(
+        approvedRecipes.where((recipe) =>
+        recipe.title.toLowerCase().contains(query.toLowerCase()) ||
+            recipe.chef.toLowerCase().contains(query.toLowerCase()))
+            .toList(),
+      );
     }
   }
 }

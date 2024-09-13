@@ -240,6 +240,7 @@ class BlogPage extends StatelessWidget {
     final dark = THelperFunctions.isDarkMode(context);
 
     final controller = BlogController.instance;
+    final TextEditingController searchController = TextEditingController();
 
     return Scaffold(
       appBar: TAppBar(
@@ -256,7 +257,13 @@ class BlogPage extends StatelessWidget {
           padding: const EdgeInsets.only(top: TSizes.defaultSpace),
           child: Column(
             children: [
-              const TSearchContainer(text: 'Search Ingredients'),
+              TSearchContainer(
+                controller: searchController,
+                text: 'Search Blogs',
+                onTap: () {
+                  controller.searchBlogs(searchController.text);
+                },
+              ),
               const SizedBox(
                 height: TSizes.spaceBtwSections,
               ),
@@ -265,11 +272,11 @@ class BlogPage extends StatelessWidget {
                 child: Obx((){
                   if(controller.isLoading.value) return const TVerticalProductShimmer();
 
-                  if(controller.approvedBlogs.isEmpty) {
+                  if(controller.filteredBlogs.isEmpty) {
                     return Center(child: Text('No Data Found!', style: Theme.of(context).textTheme.bodyMedium));
                   }
                   return GridView.builder(
-                    itemCount: controller.approvedBlogs.length,
+                    itemCount: searchController.text.isEmpty ? controller.approvedBlogs.length : controller.filteredBlogs.length,
                     shrinkWrap: true,
                     padding: EdgeInsets.zero,
                     physics: const NeverScrollableScrollPhysics(),
@@ -279,7 +286,13 @@ class BlogPage extends StatelessWidget {
                       mainAxisSpacing: TSizes.gridViewSpacing,
                       crossAxisSpacing: TSizes.gridViewSpacing,
                     ),
-                    itemBuilder: (_, index) => BlogsCard(blog: controller.approvedBlogs[index]),
+                    itemBuilder: (_, index) {
+                      if (searchController.text.isEmpty) {
+                        return BlogsCard(blog: controller.approvedBlogs[index]);
+                      } else {
+                        return BlogsCard(blog: controller.filteredBlogs[index]);
+                      }
+                    },
                   );
                 }
 

@@ -20,6 +20,7 @@ class IngredientsScreen extends StatelessWidget {
     final dark = THelperFunctions.isDarkMode(context);
 
     final controller = Get.put(IngredientController());
+    final TextEditingController searchController = TextEditingController();
 
     return Scaffold(
       appBar: TAppBar(
@@ -36,7 +37,13 @@ class IngredientsScreen extends StatelessWidget {
           padding: const EdgeInsets.only(top: TSizes.defaultSpace),
           child: Column(
               children: [
-                const TSearchContainer(text: 'Search Ingredients'),
+                TSearchContainer(
+                    controller: searchController,
+                    text: 'Search Ingredients',
+                  onTap: () {
+                    controller.searchIngredients(searchController.text);
+                  },
+                ),
                 const SizedBox(
                   height: TSizes.spaceBtwSections,
                 ),
@@ -45,12 +52,19 @@ class IngredientsScreen extends StatelessWidget {
                   child: Obx(() {
                     if(controller.isLoading.value) return const TVerticalProductShimmer();
 
-                    if(controller.allIngredients.isEmpty) {
+                    if(controller.filteredIngredients.isEmpty) {
                       return Center(child: Text('No Data Found!', style: Theme.of(context).textTheme.bodyMedium));
                     }
                     return TGridLayout(
-                        itemCount: controller.allIngredients.length,
-                        itemBuilder: (_, index) => TIngredientCardVertical(ingredient: controller.allIngredients[index]));
+                        itemCount: searchController.text.isEmpty ? controller.allIngredients.length : controller.filteredIngredients.length,
+                        itemBuilder: (_, index) {
+                          if (searchController.text.isEmpty) {
+                            return TIngredientCardVertical(ingredient: controller.allIngredients[index]);
+                          } else {
+                            return TIngredientCardVertical(ingredient: controller.filteredIngredients[index]);
+                          }
+                        },
+                    );
                   }),
                 )
               ],

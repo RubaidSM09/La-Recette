@@ -9,6 +9,7 @@ class IngredientController extends GetxController {
   final isLoading = false.obs;
   final ingredientRepository = Get.put(IngredientRepository());
   RxList<IngredientModel> allIngredients = <IngredientModel>[].obs;
+  RxList<IngredientModel> filteredIngredients = <IngredientModel>[].obs;
 
   @override
   void onInit() {
@@ -27,10 +28,26 @@ class IngredientController extends GetxController {
       // Assign Recipes
       allIngredients.assignAll(ingredients);
 
+      filteredIngredients.assignAll(allIngredients);
+
     } catch(e) {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  /// -- Search Ingredients
+  void searchIngredients(String query) {
+    if (query.isEmpty) {
+      // If search query is empty, reset the filtered recipes to all approved recipes
+      filteredIngredients.assignAll(allIngredients);
+    } else {
+      filteredIngredients.assignAll(
+        allIngredients.where((recipe) =>
+        recipe.title.toLowerCase().contains(query.toLowerCase()))
+            .toList(),
+      );
     }
   }
 }

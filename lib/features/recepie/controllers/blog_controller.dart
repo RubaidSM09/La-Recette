@@ -18,6 +18,7 @@ class BlogController extends GetxController {
   RxList<BlogModel> approvedBlogs = <BlogModel>[].obs;
   RxList<BlogModel> pendingBlogs = <BlogModel>[].obs;
   RxList<BlogModel> myBlogs = <BlogModel>[].obs;
+  RxList<BlogModel> filteredBlogs = <BlogModel>[].obs;
 
   var blogId = ''.obs;
   var blogTitle = ''.obs;
@@ -67,6 +68,8 @@ class BlogController extends GetxController {
 
       // Assign Recipes
       approvedBlogs.assignAll(blogs);
+
+      filteredBlogs.assignAll(approvedBlogs);
 
     } catch(e) {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
@@ -150,6 +153,21 @@ class BlogController extends GetxController {
       return [];
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  /// -- Search blogs by Title or Author
+  void searchBlogs(String query) {
+    if (query.isEmpty) {
+      // If search query is empty, reset the filtered recipes to all approved recipes
+      filteredBlogs.assignAll(approvedBlogs);
+    } else {
+      filteredBlogs.assignAll(
+        approvedBlogs.where((blog) =>
+        blog.title.toLowerCase().contains(query.toLowerCase()) ||
+            blog.author.toLowerCase().contains(query.toLowerCase()))
+            .toList(),
+      );
     }
   }
 }
