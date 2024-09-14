@@ -5,6 +5,7 @@ class RecipeModel {
   String id;
   String title;
   String chef;
+  String chefId;
   String time;
   String thumbnail;
   double? ratings;
@@ -18,6 +19,7 @@ class RecipeModel {
     required this.id,
     required this.title,
     required this.chef,
+    required this.chefId,
     required this.time,
     required this.thumbnail,
     this.ratings,
@@ -29,13 +31,14 @@ class RecipeModel {
   });
 
   /// Create Empty func for clean code
-  static RecipeModel empty() => RecipeModel(id: '', title: '', chef: '', time: '', thumbnail: '', category: '');
+  static RecipeModel empty() => RecipeModel(id: '', title: '', chef: '',chefId: '', time: '', thumbnail: '', category: '');
 
   /// Json Format
   toJson() {
     return {
       'Title': title,
       'Chef': chef,
+      'ChefId': chefId,
       'Time': time,
       'Image': thumbnail,
       'Ratings': ratings,
@@ -55,6 +58,7 @@ class RecipeModel {
       id: document.id,
       title: data['Title'],
       chef: data['Chef'],
+      chefId: data['ChefId'],
       time: data['Time'] ?? '',
       thumbnail: data['Image'] ?? '',
       ratings: double.parse((data['Ratings'] ?? 0.0).toString()),
@@ -73,6 +77,7 @@ class RecipeModel {
       id: document.id,
       title: data['Title'] ?? '',
       chef: data['Chef'] ?? '',
+      chefId: data['ChefId'] ?? '',
       time: data['Time'] ?? '',
       thumbnail: data['Image'] ?? '',
       ratings: double.parse((data['Ratings'] ?? 0.0).toString()),
@@ -91,6 +96,7 @@ class RecipeModel {
       id: doc.id,
       title: data['Title'],
       chef: data['Chef'],
+      chefId: data['ChefId'],
       time: data['Time'] ?? '',
       thumbnail: data['Image'] ?? '',
       ratings: double.parse((data['Ratings'] ?? 0.0).toString()),

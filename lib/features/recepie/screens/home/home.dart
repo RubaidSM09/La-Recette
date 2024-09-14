@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:t_store/common/widgets/shimmers/vertical_product_shimmer.dart';
+import 'package:t_store/features/personalization/controllers/user_controller.dart';
 import 'package:t_store/features/recepie/controllers/recipe/recipe_controller.dart';
 import 'package:t_store/features/recepie/screens/home/widgets/home_appbar.dart';
 import 'package:t_store/features/recepie/screens/home/widgets/home_categories.dart';
@@ -43,6 +44,7 @@ class HomeScreen extends StatelessWidget {
               controller: searchController,
               text: 'Search Recipes by Title or Chef',
               onTap: () {
+                print(UserController.instance.user.value.id);
                 controller.searchRecipes(searchController.text);
               },
             ),

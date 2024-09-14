@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:t_store/features/personalization/controllers/user_controller.dart';
 import 'package:t_store/features/personalization/screens/admin/admin_dashboard.dart';
 import 'package:t_store/features/recepie/controllers/blog_controller.dart';
+import 'package:t_store/features/recepie/controllers/notifications_controller.dart';
 import 'package:t_store/features/recepie/controllers/recipe/recipe_controller.dart';
 import 'package:t_store/features/recepie/screens/blogs/blogs.dart';
 import 'package:t_store/features/recepie/screens/home/home.dart';

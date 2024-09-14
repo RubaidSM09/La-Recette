@@ -4,6 +4,7 @@ class BlogModel {
   String id;
   String title;
   String author;
+  String authorId;
   String content;
   String? image;
 
@@ -11,18 +12,20 @@ class BlogModel {
     required this.id,
     required this.title,
     required this.author,
+    required this.authorId,
     required this.content,
     this.image,
   });
 
   /// Create Empty func for clean code
-  static BlogModel empty() => BlogModel(id: '', title: '', author: '', content: '');
+  static BlogModel empty() => BlogModel(id: '', title: '', author: '', authorId: '', content: '');
 
   /// Json Format
   toJson() {
     return {
       'Title': title,
       'Author': author,
+      'AuthorId': authorId,
       'Content': content,
       'Image': image,
     };
@@ -36,6 +39,7 @@ class BlogModel {
       id: document.id,
       title: data['Title'],
       author: data['Author'],
+      authorId: data['AuthorId'],
       content: data['Content'],
       image: data['Image'] ?? '',
     );
@@ -48,6 +52,7 @@ class BlogModel {
       id: document.id,
       title: data['Title'] ?? '',
       author: data['Author'] ?? '',
+      authorId: data['AuthorId'] ?? '',
       content: data['Content'] ?? '',
       image: data['Image'] ?? '',
     );

@@ -40,15 +40,17 @@ class BlogRepository extends GetxController {
   }
 
   /// Add blog
-  Future<void> addBlog(String title, String author, String content, String? image) async {
+  Future<String> addBlog(String title, String author, String authorId, String content, String? image) async {
     try {
-      await _db.collection('Blogs').add({
+      DocumentReference docRef = await _db.collection('Blogs').add({
         'Title': title,
         'Author': author,
+        'AuthorId': authorId,
         'Content': content,
         'Image': image,
         'IsPending': true,
       });
+      return docRef.id;
     } on FirebaseException catch (e) {
       throw TFirebaseException(e.code).message;
     } on PlatformException catch (e) {

@@ -61,7 +61,6 @@ class ReviewsRatingsController extends GetxController {
         review: reviewController.text.trim(),
         username: controller.user.value.username,
       );
-      print('Ok');
       await reviewRatingRepository.addReviewRating(reviewRating, recipeId.value);
       updateRatings(recipeId.value);
 

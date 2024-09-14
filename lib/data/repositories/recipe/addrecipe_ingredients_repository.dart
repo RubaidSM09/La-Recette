@@ -4,9 +4,10 @@ import 'package:t_store/features/recepie/models/addrecipe_ingredients_model.dart
 class AddIngredientsRepository {
   final _db = FirebaseFirestore.instance;
 
-  Future<void> addRecipe(
+  Future<String> addRecipe(
       String recipeName,
       String chefName,
+      String chefId,
       String cookingTimeHours,
       String cookingTimeMinutes,
       double rating,
@@ -19,9 +20,10 @@ class AddIngredientsRepository {
       String imageUrl,
       ) async {
     try {
-      await _db.collection('recipe').add({
+      DocumentReference docRef = await _db.collection('recipe').add({
         'Title': recipeName,
         'Chef': chefName,
+        'ChefId': chefId,
         'Time': '$cookingTimeHours:$cookingTimeMinutes',
         'Ratings': rating,
         'Servings': servings,
@@ -33,6 +35,9 @@ class AddIngredientsRepository {
         'Image': imageUrl,
         'IsPending': true,
       });
+
+      // Return the auto-generated recipe ID
+      return docRef.id;
     } catch (e) {
       throw 'Error adding recipe: $e';
     }

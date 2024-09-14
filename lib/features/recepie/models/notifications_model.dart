@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NotificationsModel {
+  String? id;
   Timestamp? time;
   final String title;
   String? type;
@@ -10,6 +11,7 @@ class NotificationsModel {
   bool? isVisited;
 
   NotificationsModel({
+    this.id,
     required this.image,
     required this.title,
     this.time,
@@ -35,8 +37,9 @@ class NotificationsModel {
     };
   }
 
-  factory NotificationsModel.fromMap(Map<String, dynamic> data) {
+  factory NotificationsModel.fromMap(Map<String, dynamic> data, String? id) {
     return NotificationsModel(
+      id: id,
       time: data['Time'] as Timestamp,
       title: data['Title'] as String,
       type: data['Type'] as String,
@@ -52,6 +55,7 @@ class NotificationsModel {
     final data = snapshot.data() as Map<String, dynamic>;
 
     return NotificationsModel(
+      id: snapshot.id,
       time: data['Time'] != null && data['Time'] is Timestamp
           ? data['Time'] as Timestamp
           : Timestamp.now(),

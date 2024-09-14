@@ -3,15 +3,19 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:t_store/features/personalization/controllers/user_controller.dart';
+import 'package:t_store/features/recepie/controllers/notifications_controller.dart';
 import 'package:t_store/features/recepie/models/addrecipe_ingredients_model.dart';
 import 'package:t_store/data/repositories/recipe/addrecipe_ingredients_repository.dart';
+import 'package:t_store/features/recepie/models/recipe_model.dart';
 class AddIngredientsController extends GetxController {
   final AddIngredientsRepository _repository = AddIngredientsRepository();
   final controller = Get.put(UserController());
+  final notificationsController = NotificationsController.instance;
 
   var recipeId = ''.obs;
   var recipeName = ''.obs;
   var chefName = ''.obs;
+  var chefId = ''.obs;
   var cookingTimeHours = ''.obs;
   var cookingTimeMinutes = ''.obs;
   var rating = 0.00.obs;
@@ -48,10 +52,10 @@ class AddIngredientsController extends GetxController {
         imageUrl = await uploadImage(image.value!);
       }
       recipeImage.value = imageUrl!;
-      print(recipeImage.value);
-      await _repository.addRecipe(
+      String generatedRecipeId = await _repository.addRecipe(
         recipeName.value,
         chefName.value = controller.user.value.fullName,
+        chefId.value = controller.user.value.id,
         cookingTimeHours.value,
         cookingTimeMinutes.value,
         rating.value = 0,
@@ -63,6 +67,16 @@ class AddIngredientsController extends GetxController {
         procedure.value,
         recipeImage.value,
       );
+
+      // After the recipe is submitted and the ID is generated, send a notification
+      notificationsController.sendNotifications(
+          "You have a new recipe pending",  // Title
+          "Recipe Pending",                  // Type
+          generatedRecipeId,                 // Path
+          recipeImage.value,                 // Image
+          "jCtTIRLxdYT6Ri5dEhU3aKuk75x1",     // Admin Id
+      );
+
       // Handle success (e.g., show a success message, navigate to another screen, etc.)
     } catch (e) {
       // Handle error (e.g., show an error message)
@@ -70,10 +84,18 @@ class AddIngredientsController extends GetxController {
     }
   }
 
-  void approveRecipe() async {
+  void approveRecipe(RecipeModel recipe) async {
     try {
       await _repository.updateRecipe(
         recipeId.value,
+      );
+
+      notificationsController.sendNotifications(
+        "Your recipe '${recipe.title}' had been approved",  // Title
+        "Recipe Upload",                  // Type
+        recipeId.value,                 // Path
+        recipe.thumbnail,                 // Image
+        recipe.chefId,     // Chef's Id
       );
       // Handle success (e.g., show a success message, navigate to another screen, etc.)
     } catch (e) {

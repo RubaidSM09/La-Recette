@@ -70,7 +70,7 @@ class RecipeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.to(() => AdminRecipePage(recipe: recipe)),
+      onTap: () => Get.to(() => AdminRecipePage(recipeId: recipe.id)),
       child: Container(
         height: 250,
         width: 150,
@@ -123,7 +123,7 @@ class RecipeCard extends StatelessWidget {
                     const SizedBox(height: 12),
                     Center(
                         child: ElevatedButton(
-                          onPressed: () => Get.to(() => AdminRecipePage(recipe: recipe)),
+                          onPressed: () => Get.to(() => AdminRecipePage(recipeId: recipe.id)),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFE85A4F), // Button color
                             foregroundColor: Colors.white, // Text color

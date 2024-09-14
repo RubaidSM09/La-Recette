@@ -7,11 +7,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:t_store/common/widgets/loader/loaders.dart';
 import 'package:t_store/data/repositories/blog/blog_repository.dart';
 import 'package:t_store/features/personalization/controllers/user_controller.dart';
+import 'package:t_store/features/recepie/controllers/notifications_controller.dart';
 import 'package:t_store/features/recepie/models/blog_model.dart';
 
 class BlogController extends GetxController {
   static BlogController get instance => Get.find();
   final controller = Get.put(UserController());
+  final notificationsController = NotificationsController.instance;
 
   final isLoading = false.obs;
   final blogRepository = Get.put(BlogRepository());
@@ -23,6 +25,7 @@ class BlogController extends GetxController {
   var blogId = ''.obs;
   var blogTitle = ''.obs;
   var blogAuthor = ''.obs;
+  var blogAuthorId = ''.obs;
   var blogContent = ''.obs;
   var blogImage = ''.obs;
   var image = Rx<File?>(null);
@@ -99,12 +102,21 @@ class BlogController extends GetxController {
   void submitBlog() async {
     try {
       blogAuthor.value = controller.user.value.fullName;
+      blogAuthorId.value = controller.user.value.id;
       String? imageUrl;
       if (image.value != null) {
         imageUrl = await uploadImage(image.value!);
       }
       blogImage.value = imageUrl!;
-      await blogRepository.addBlog(blogTitle.value, blogAuthor.value, blogContent.value, blogImage.value);
+      String generatedBlogId = await blogRepository.addBlog(blogTitle.value, blogAuthor.value, blogAuthorId.value, blogContent.value, blogImage.value);
+
+      notificationsController.sendNotifications(
+        "You have a new blog pending",  // Title
+        "Blog Pending",                  // Type
+        generatedBlogId,                 // Path
+        blogImage.value,                 // Image
+        "jCtTIRLxdYT6Ri5dEhU3aKuk75x1",     // Admin Id
+      );
     } catch(e) {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
     } finally {
@@ -112,10 +124,18 @@ class BlogController extends GetxController {
     }
   }
 
-  void approveBlog() async {
+  void approveBlog(BlogModel blog) async {
     try {
       await blogRepository.updateBlog(
         blogId.value,
+      );
+
+      notificationsController.sendNotifications(
+        "Your recipe '${blog.title}' had been approved",  // Title
+        "Recipe Upload",                  // Type
+        blogId.value,                 // Path
+        blog.image.toString(),                 // Image
+        blog.authorId,     // Chef's Id
       );
       // Handle success (e.g., show a success message, navigate to another screen, etc.)
     } catch (e) {

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:t_store/features/recepie/controllers/recipe/addrecipe_ingredients_controller.dart';
@@ -8,9 +9,9 @@ import 'package:t_store/utils/constants/sizes.dart';
 import 'package:t_store/utils/helpers/helper_functions.dart';
 
 class AdminRecipePage extends StatelessWidget {
-  const AdminRecipePage({super.key, required this.recipe});
+  const AdminRecipePage({super.key, required this.recipeId});
 
-  final RecipeModel recipe;
+  final String recipeId;
 
   @override
   Widget build(BuildContext context) {
@@ -19,99 +20,287 @@ class AdminRecipePage extends StatelessWidget {
     
     return Scaffold(
       body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Header image
-                Container(
-                    height: 244,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(recipe.thumbnail),
-                        fit: BoxFit.cover,
+          child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+              stream: FirebaseFirestore.instance
+                  .collection('recipe')
+                  .doc(recipeId)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasError) {
+                  return const Center(child: Text('Error loading recipe'));
+                }
+
+                if (!snapshot.hasData || !snapshot.data!.exists) {
+                  return const Center(child: Text('Recipe not found'));
+                }
+
+                RecipeModel recipe = RecipeModel.fromSnapshot(snapshot.data!);
+
+                return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Header image
+                    Container(
+                        height: 244,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(recipe.thumbnail),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
+                    const SizedBox(height: TSizes.spaceBtwItems,),
+                    // Title
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: Text(
+                          recipe.title,
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            height: 1.5,
+                            color: Color(0xFFE85A4F),
+                          ),
+                        ),
                     ),
-                  ),
-                const SizedBox(height: TSizes.spaceBtwItems,),
-                // Title
-                Padding(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: Text(
-                      recipe.title,
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        height: 1.5,
-                        color: Color(0xFFE85A4F),
-                      ),
-                    ),
-                ),
-                // Chef's name
-                Padding(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: Text(
-                      recipe.chef,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.normal,
-                        fontSize: 14,
-                        height: 1.5,
-                        color: dark ? TColors.dark : TColors.light,
-                      ),
-                    ),
-                ),
-                // Cooking Time and Rating
-                Padding(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: Row(
-                      children: [
-                        const Icon(Icons.timer, color: Color(0xFFFF7900), size: 12),
-                        const SizedBox(width: 4),
-                        Text(
-                          recipe.time,
+                    // Chef's name
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: Text(
+                          recipe.chef,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.normal,
-                            fontSize: 9,
+                            fontSize: 14,
                             height: 1.5,
                             color: dark ? TColors.dark : TColors.light,
                           ),
                         ),
-                        const SizedBox(width: 16),
-                        const Icon(Icons.star, color: Color(0xFFFEA801), size: 12),
-                        const SizedBox(width: 4),
-                        Text(
-                          recipe.ratings.toString(),
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.normal,
-                            fontSize: 9,
-                            height: 1.5,
-                            color: dark ? TColors.dark : TColors.light,
-                          ),
-                        ),
-                      ],
                     ),
-                ),
-                // Servings
-                Padding(
-                  padding: const EdgeInsets.only(left: 12, bottom: 12),
-                  child: Row(
-                      children: [
-                        Row(
+                    // Cooking Time and Rating
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: Row(
                           children: [
-                            const Text(
-                              'Servings:',
+                            const Icon(Icons.timer, color: Color(0xFFFF7900), size: 12),
+                            const SizedBox(width: 4),
+                            Text(
+                              recipe.time,
                               style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.normal,
+                                fontSize: 9,
+                                height: 1.5,
+                                color: dark ? TColors.dark : TColors.light,
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            const Icon(Icons.star, color: Color(0xFFFEA801), size: 12),
+                            const SizedBox(width: 4),
+                            Text(
+                              recipe.ratings.toString(),
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.normal,
+                                fontSize: 9,
+                                height: 1.5,
+                                color: dark ? TColors.dark : TColors.light,
+                              ),
+                            ),
+                          ],
+                        ),
+                    ),
+                    // Servings
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12, bottom: 12),
+                      child: Row(
+                          children: [
+                            Row(
+                              children: [
+                                const Text(
+                                  'Servings:',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 12,
+                                    height: 1.5,
+                                    color: Color(0xFFE85A4F),
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  recipe.servings.toString(),
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 12,
+                                    height: 1.5,
+                                    color: dark ? TColors.dark : TColors.light,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                    ),
+
+                    // Description Section
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: Text(
+                          'Description',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            height: 1.5,
+                            color: dark ? TColors.dark : TColors.light,
+                          ),
+                        ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+                      child: Container(
+                          // width: 332,
+                          // height: 98,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.25),
+                                spreadRadius: 2,
+                                blurRadius: 2,
+                                offset: const Offset(2, 2),
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              recipe.description!.toString(),
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.normal,
+                                fontSize: 11,
+                                height: 1.5,
+                                color: Colors.black.withOpacity(0.72),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ),
+                    // Ingredients Section
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: Text(
+                          'Ingredients',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            height: 1.5,
+                            color: dark ? TColors.dark : TColors.light,
+                          ),
+                        ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+                      child: Container(
+                          // width: 332,
+                          height: 226,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.25),
+                                spreadRadius: 2,
+                                blurRadius: 2,
+                                offset: const Offset(2, 2),
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ListView.builder(
+                                itemCount: recipe.ingredients?.length,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {},
+                                    child: buildIngredientRow(recipe.ingredients![index].name.toString(), recipe.ingredients![index].quantity.toString()),
+                                  );
+                                }
+                            ),
+                          ),
+                        ),
+                    ),
+                    // Directions Section
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: Text(
+                          'Directions',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            height: 1.5,
+                            color: dark ? TColors.dark : TColors.light,
+                          ),
+                        ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+                      child: Container(
+                          // width: 330,
+                          // height: 487,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.25),
+                                spreadRadius: 2,
+                                blurRadius: 2,
+                                offset: const Offset(2, 2),
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              recipe.direction!.toString(),
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.normal,
                                 fontSize: 12,
                                 height: 1.5,
-                                color: Color(0xFFE85A4F),
+                                color: Color(0xFF000000),
                               ),
                             ),
-                            const SizedBox(width: 4),
+                          ),
+                        ),
+                    ),
+                    // Reviews & Ratings Section
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12, bottom: TSizes.spaceBtwSections),
+                      child: Row(
+                          children: [
+                            Text(
+                              'Category:',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                height: 1.5,
+                                color: dark ? TColors.dark : TColors.light,
+                              ),
+                            ),
+                            const SizedBox(width: 4,),
                             Text(
                               recipe.servings.toString(),
                               style: TextStyle(
@@ -124,201 +313,34 @@ class AdminRecipePage extends StatelessWidget {
                             ),
                           ],
                         ),
-                      ],
                     ),
-                ),
-
-                // Description Section
-                Padding(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: Text(
-                      'Description',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        height: 1.5,
-                        color: dark ? TColors.dark : TColors.light,
+                    Center(
+                      child: SizedBox(
+                          width: 180,
+                          child: ElevatedButton(onPressed: () {
+                            controller.isPending.value = false;
+                            controller.recipeId.value = recipe.id;
+                            controller.approveRecipe(recipe);
+                            Get.to(() => const NavigationMenu());
+                          }, style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE85A4F)), child: const Text("Accept", style: TextStyle(color: TColors.dark),))
                       ),
                     ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
-                  child: Container(
-                      // width: 332,
-                      // height: 98,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.25),
-                            spreadRadius: 2,
-                            blurRadius: 2,
-                            offset: const Offset(2, 2),
-                          ),
-                        ],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          recipe.description!.toString(),
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.normal,
-                            fontSize: 11,
-                            height: 1.5,
-                            color: Colors.black.withOpacity(0.72),
-                          ),
-                        ),
+                    const SizedBox(height: TSizes.spaceBtwItems),
+                    Center(
+                      child: SizedBox(
+                          width: 180,
+                          child: ElevatedButton(onPressed: () {
+                            controller.recipeId.value = recipe.id;
+                            controller.declineRecipe();
+                            Get.to(() => const NavigationMenu());
+                          }, style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE85A4F)), child: const Text("Reject", style: TextStyle(color: TColors.dark),))
                       ),
                     ),
-                ),
-                // Ingredients Section
-                Padding(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: Text(
-                      'Ingredients',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        height: 1.5,
-                        color: dark ? TColors.dark : TColors.light,
-                      ),
-                    ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
-                  child: Container(
-                      // width: 332,
-                      height: 226,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.25),
-                            spreadRadius: 2,
-                            blurRadius: 2,
-                            offset: const Offset(2, 2),
-                          ),
-                        ],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListView.builder(
-                            itemCount: recipe.ingredients?.length,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {},
-                                child: buildIngredientRow(recipe.ingredients![index].name.toString(), recipe.ingredients![index].quantity.toString()),
-                              );
-                            }
-                        ),
-                      ),
-                    ),
-                ),
-                // Directions Section
-                Padding(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: Text(
-                      'Directions',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        height: 1.5,
-                        color: dark ? TColors.dark : TColors.light,
-                      ),
-                    ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
-                  child: Container(
-                      // width: 330,
-                      // height: 487,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.25),
-                            spreadRadius: 2,
-                            blurRadius: 2,
-                            offset: const Offset(2, 2),
-                          ),
-                        ],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          recipe.direction!.toString(),
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.normal,
-                            fontSize: 12,
-                            height: 1.5,
-                            color: Color(0xFF000000),
-                          ),
-                        ),
-                      ),
-                    ),
-                ),
-                // Reviews & Ratings Section
-                Padding(
-                  padding: const EdgeInsets.only(left: 12, bottom: TSizes.spaceBtwSections),
-                  child: Row(
-                      children: [
-                        Text(
-                          'Category:',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            height: 1.5,
-                            color: dark ? TColors.dark : TColors.light,
-                          ),
-                        ),
-                        const SizedBox(width: 4,),
-                        Text(
-                          recipe.servings.toString(),
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.normal,
-                            fontSize: 12,
-                            height: 1.5,
-                            color: dark ? TColors.dark : TColors.light,
-                          ),
-                        ),
-                      ],
-                    ),
-                ),
-                Center(
-                  child: SizedBox(
-                      width: 180,
-                      child: ElevatedButton(onPressed: () {
-                        controller.isPending.value = false;
-                        controller.recipeId.value = recipe.id;
-                        controller.approveRecipe();
-                        Get.to(() => const NavigationMenu());
-                      }, style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE85A4F)), child: const Text("Accept", style: TextStyle(color: TColors.dark),))
-                  ),
-                ),
-                const SizedBox(height: TSizes.spaceBtwItems),
-                Center(
-                  child: SizedBox(
-                      width: 180,
-                      child: ElevatedButton(onPressed: () {
-                        controller.recipeId.value = recipe.id;
-                        controller.declineRecipe();
-                        Get.to(() => const NavigationMenu());
-                      }, style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE85A4F)), child: const Text("Reject", style: TextStyle(color: TColors.dark),))
-                  ),
-                ),
-                const SizedBox(height: TSizes.spaceBtwItems),
-              ],
-            ),
+                    const SizedBox(height: TSizes.spaceBtwItems),
+                  ],
+                );
+            }
+          ),
           ),
     );
   }

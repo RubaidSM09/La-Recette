@@ -74,7 +74,7 @@ class BlogCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
     return GestureDetector(
-      onTap: () => Get.to(() => AdminBlogPage(blog: blog)),
+      onTap: () => Get.to(() => AdminBlogPage(blogId: blog.id)),
       child: Container(
         width: 360,
         padding: const EdgeInsets.all(1),

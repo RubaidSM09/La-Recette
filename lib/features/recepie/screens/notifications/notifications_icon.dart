@@ -27,13 +27,19 @@ class NotificationCounterIcon extends StatelessWidget {
   Widget build(BuildContext context) {
 
     //Get an instance of the CartController
-    final controller=Get.put(NotificationsController());
+    final controller=NotificationsController.instance;
+    final userController = UserController.instance;
 
     final dark=THelperFunctions.isDarkMode(context);
     return Stack(
       children: [
         IconButton(
-          onPressed: () => Get.to(() => NotificationsPage(user: FirebaseAuth.instance.currentUser!.uid)),
+          onPressed: () {
+            for(int i=0;i<controller.unreadNotifications.length;i++){
+              controller.updateAfterReading(controller.unreadNotifications[i].id.toString());
+            }
+            Get.to(() => NotificationsPage(user: FirebaseAuth.instance.currentUser!.uid));
+          },
           icon: Icon(
             Iconsax.notification,
             color: iconColor,

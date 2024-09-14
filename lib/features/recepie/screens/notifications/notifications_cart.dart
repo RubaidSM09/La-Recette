@@ -6,7 +6,10 @@ import 'package:t_store/common/widgets/custom_shapes/containers/rounded_containe
 import 'package:t_store/common/widgets/images/t_rounded_image.dart';
 import 'package:t_store/common/widgets/texts/product_title_text.dart';
 import 'package:t_store/common/widgets/texts/t_brand_title_text_with_verified_icon.dart';
+import 'package:t_store/features/personalization/screens/admin/widgets/admin_blog_details.dart';
+import 'package:t_store/features/personalization/screens/admin/widgets/admin_recipe_details.dart';
 import 'package:t_store/features/recepie/controllers/blog_controller.dart';
+import 'package:t_store/features/recepie/controllers/notifications_controller.dart';
 import 'package:t_store/features/recepie/models/blog_model.dart';
 import 'package:t_store/features/recepie/models/notifications_model.dart';
 import 'package:t_store/features/recepie/screens/blogs/blog_details_page.dart';
@@ -21,28 +24,42 @@ class NotificationsCard extends StatelessWidget {
 
   final NotificationsModel notifications;
   final blogController = BlogController.instance;
+  final controller=NotificationsController.instance;
 
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
     return GestureDetector(
       onTap: () {
+        if(notifications.isVisited==false){
+          controller.updateAfterVisiting(notifications);
+        }
         if(notifications.type == "Recipe Upload"){
           Get.to(() => RecipePage(recipeId: notifications.path.toString(),));
         }
         else if(notifications.type == "Blog Upload"){
           Get.to(() => BlogDetailsPage(blogId: notifications.path.toString()));
         }
+        else if(notifications.type == "Recipe Pending"){
+          Get.to(() => AdminRecipePage(recipeId: notifications.path.toString()));
+        }
+        else if(notifications.type == "Blog Pending"){
+          Get.to(() => AdminBlogPage(blogId: notifications.path.toString()));
+        }
       },
       child: Column(
         children: [
           Container(
-            width: 369,
-            padding: const EdgeInsets.all(1),
+            height: 90,
+            width: 361,
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               boxShadow: [TShadowStyle.verticalProductShadow],
               borderRadius: BorderRadius.circular(0),
-              color: dark ? TColors.dark : const Color(0xFFE85A4F),
+              border: Border(
+                bottom: BorderSide(width: 5,color: dark ? TColors.dark : const Color(0xFFE85A4F)),
+              ),
+              color: notifications.isVisited! ? dark ? TColors.light : TColors.dark : dark ? TColors.dark : const Color(0xFFE85A4F),
             ),
             child: Row(
               children: [
@@ -63,8 +80,8 @@ class NotificationsCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: TSizes.sm),
                   child: SizedBox(
-                    width: 275,
-                    child: TBrandTitleWithVerifiedIcon(title: notifications.title, textColor: dark ? TColors.light : TColors.dark, brandTextSize: TextSizes.large, maxLines: 3,),
+                    width: 250,
+                    child: TBrandTitleWithVerifiedIcon(title: notifications.title, textColor: notifications.isVisited! ? dark ? TColors.dark : const Color(0xFFE85A4F) : dark ? TColors.light : TColors.dark, brandTextSize: TextSizes.large, maxLines: 3,),
                   ),
                 ),
 
@@ -91,7 +108,7 @@ class NotificationsCard extends StatelessWidget {
             // ],
             // ),
           ),
-          const SizedBox(height: 5,)
+          // const SizedBox(height: 5,)
         ],
       ),
     );

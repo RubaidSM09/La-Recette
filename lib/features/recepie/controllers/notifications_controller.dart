@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:t_store/common/widgets/loader/loaders.dart';
@@ -16,6 +17,9 @@ class NotificationsController extends GetxController {
   static NotificationsController get instance => Get.find();
   final controller = Get.put(UserController());
   var isLoading = false.obs;
+
+  RxList<NotificationsModel> unreadNotifications = <NotificationsModel>[].obs;
+  RxList<NotificationsModel> unVisitedNotifications = <NotificationsModel>[].obs;
 
   var userId = ''.obs;
   GlobalKey<FormState> reviewRatingFormKey = GlobalKey<FormState>();
@@ -41,6 +45,7 @@ class NotificationsController extends GetxController {
     try {
       userId.value = id;
       final notifications = await notificationsRepository.fetchUnreadNotificationsOfUser(userId.value);
+      unreadNotifications.assignAll(notifications);
       return notifications;
     } catch (e) {
       TLoaders.errorSnackBar(title: 'Address not found', message: e.toString());
@@ -48,8 +53,20 @@ class NotificationsController extends GetxController {
     }
   }
 
-  /// Add new Address
-  /*Future addReviewsRatings() async {
+  Future<List<NotificationsModel>> getUnvisitedNotificationsOfUser(String id) async {
+    try {
+      userId.value = id;
+      final notifications = await notificationsRepository.fetchUnvisitedNotificationsOfUser(userId.value);
+      unVisitedNotifications.assignAll(notifications);
+      return notifications;
+    } catch (e) {
+      TLoaders.errorSnackBar(title: 'Address not found', message: e.toString());
+      return [];
+    }
+  }
+
+  /// Send Notifications
+  Future sendNotifications(String title, String type, String path, String image, String userId) async {
     try {
       // Start Loading
       TFullScreenLoader.openLoadingDialog('Starting Address...', TImages.docerAnimation);
@@ -61,28 +78,26 @@ class NotificationsController extends GetxController {
         return;
       }
 
-      // Form Validation
-      if (!reviewRatingFormKey.currentState!.validate()){
-        TFullScreenLoader.stopLoading();
-        return;
-      }
-
       // Save Address Data
-      final reviewRating = RecipeReviewRatingModel(
-        id: '',
-        rating: double.parse(ratingController.text.trim()),
-        review: reviewController.text.trim(),
-        username: controller.user.value.username,
+      final notification = NotificationsModel(
+        time: Timestamp.now(),
+        title: title,
+        type: type,
+        path: path,
+        image: image,
+        isRead: false,
+        isVisited: false,
       );
-      print('Ok');
-      await reviewRatingRepository.addReviewRating(reviewRating, recipeId.value);
+      await notificationsRepository.addNotifications(notification, userId);
       // updateRatings(recipeId.value);
 
       // Remove Loader
       TFullScreenLoader.stopLoading();
 
       // Show Success Message
-      TLoaders.successSnackBar(title: 'Congratulations', message: 'Your address has been saved successfully.');
+      if(path=="Recipe Pending" || path=="Blog Pending"){
+        TLoaders.successSnackBar(title: 'Congratulations', message: 'Your request has been sent successfully.');
+      }
 
       // Refresh Addresses Data
       refreshData.toggle();
@@ -97,5 +112,21 @@ class NotificationsController extends GetxController {
       TFullScreenLoader.stopLoading();
       TLoaders.errorSnackBar(title: 'Address not found', message: e.toString());
     }
-  }*/
+  }
+
+  void updateAfterReading(String id) async {
+    try {
+      await notificationsRepository.updateIsRead(id);
+    } catch (e) {
+      TLoaders.errorSnackBar(title: 'Address not found', message: e.toString());
+    }
+  }
+
+  void updateAfterVisiting(NotificationsModel notification) async {
+    try {
+      await notificationsRepository.updateIsVisited(notification);
+    } catch (e) {
+      TLoaders.errorSnackBar(title: 'Address not found', message: e.toString());
+    }
+  }
 }

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:t_store/data/user/user_repository.dart';
+import 'package:t_store/features/recepie/controllers/notifications_controller.dart';
 
 import 'package:t_store/navigation_menu.dart';
 import 'package:t_store/utils/exceptions/firebase_auth_exceptions.dart';
@@ -24,6 +25,7 @@ class AuthenticationRepository extends GetxController {
   //variables
   final deviceStorage = GetStorage();
   final _auth = FirebaseAuth.instance;
+  // final notificationsController = Get.put(NotificationsController());
 
   //Get Authenticated user data
   User? get authUser => _auth.currentUser;
@@ -44,6 +46,7 @@ class AuthenticationRepository extends GetxController {
         await TLocalStorage.init(user.uid);
 
 
+        final notificationsController = Get.put(NotificationsController());
         Get.offAll(() => const NavigationMenu());
       } else {
         Get.offAll(() => VerifyEmailScreen(email: _auth.currentUser?.email));
