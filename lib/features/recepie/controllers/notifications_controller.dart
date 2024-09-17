@@ -15,7 +15,7 @@ import '../models/notifications_model.dart';
 
 class NotificationsController extends GetxController {
   static NotificationsController get instance => Get.find();
-  final controller = Get.put(UserController());
+  final controller = UserController.instance;
   var isLoading = false.obs;
 
   RxList<NotificationsModel> unreadNotifications = <NotificationsModel>[].obs;

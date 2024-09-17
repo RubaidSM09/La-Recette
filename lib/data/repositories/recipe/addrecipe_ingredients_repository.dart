@@ -24,7 +24,7 @@ class AddIngredientsRepository {
         'Title': recipeName,
         'Chef': chefName,
         'ChefId': chefId,
-        'Time': '$cookingTimeHours:$cookingTimeMinutes',
+        'Time': cookingTimeHours=='0' || cookingTimeHours=='' ? '$cookingTimeMinutes Mins' : cookingTimeMinutes=='0' || cookingTimeMinutes=='' ? '$cookingTimeHours Hrs' : '$cookingTimeHours Hrs $cookingTimeMinutes Mins',
         'Ratings': rating,
         'Servings': servings,
         'Category': category,

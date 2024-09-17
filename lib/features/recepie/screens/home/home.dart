@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:t_store/common/styles/shadow_styles.dart';
 import 'package:t_store/common/widgets/shimmers/vertical_product_shimmer.dart';
 import 'package:t_store/features/personalization/controllers/user_controller.dart';
 import 'package:t_store/features/recepie/controllers/recipe/recipe_controller.dart';
+import 'package:t_store/features/recepie/screens/chat_bot/ai_chatbot.dart';
 import 'package:t_store/features/recepie/screens/home/widgets/home_appbar.dart';
 import 'package:t_store/features/recepie/screens/home/widgets/home_categories.dart';
 import 'package:t_store/features/recepie/screens/home/widgets/promo_slider.dart';
@@ -22,6 +25,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
+    final userController = Get.put(UserController());
     final controller = RecipeController.instance;
     final TextEditingController searchController = TextEditingController();
 
@@ -37,6 +41,34 @@ class HomeScreen extends StatelessWidget {
                 TImages.promoBanner2,
                 TImages.promoBanner3,
               ],
+            ),
+            const SizedBox(height: TSizes.spaceBtwSections),
+            GestureDetector(
+              onTap: () => Get.to(() => const AiChatBot()),
+              child: Row(
+                children: [
+                  Container(
+                    width: 50,
+                    height: 50,
+                    margin: const EdgeInsets.only(left: 25),
+                    padding: const EdgeInsets.all(1),
+                    decoration: BoxDecoration(
+                      boxShadow: [TShadowStyle.verticalProductShadow],
+                      borderRadius: BorderRadius.circular(TSizes.productImageRadius),
+                      color: dark ? TColors.dark : const Color(0xFFE85A4F),
+                    ),
+                    child: Icon(Iconsax.message, color: dark ? TColors.light : TColors.dark),
+                  ),
+                  const SizedBox(width: TSizes.spaceBtwItems),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Ask anything to', style: TextStyle(fontSize: 12, color: dark ? TColors.dark : TColors.light),),
+                      Text('Recette Chef-Bot', style: TextStyle(fontSize: 24, fontFamily: 'Rochester',color: dark ? TColors.dark : const Color(0xFFE85A4F)),)
+                    ],
+                  )
+                ],
+              ),
             ),
             const SizedBox(height: TSizes.spaceBtwSections),
             // Use the updated TSearchContainer here

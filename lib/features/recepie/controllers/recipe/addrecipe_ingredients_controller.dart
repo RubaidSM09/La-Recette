@@ -115,4 +115,23 @@ class AddIngredientsController extends GetxController {
       print('Error submitting recipe: $e');
     }
   }
+
+  void deleteRecipe(RecipeModel recipe) async {
+    try {
+      await _repository.deleteRecipe(
+        recipeId.value,
+      );
+      notificationsController.sendNotifications(
+        "Your recipe '${recipe.title}' had been deleted",  // Title
+        "Recipe Delete",                  // Type
+        "",                 // Path
+        recipe.thumbnail,                 // Image
+        recipe.chefId,     // Chef's Id
+      );
+      // Handle success (e.g., show a success message, navigate to another screen, etc.)
+    } catch (e) {
+      // Handle error (e.g., show an error message)
+      print('Error submitting recipe: $e');
+    }
+  }
 }

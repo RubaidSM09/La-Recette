@@ -302,7 +302,7 @@ class AdminRecipePage extends StatelessWidget {
                             ),
                             const SizedBox(width: 4,),
                             Text(
-                              recipe.servings.toString(),
+                              recipe.category.toString(),
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.normal,

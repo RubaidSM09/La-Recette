@@ -79,51 +79,60 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:t_store/common/widgets/images/t_circular_image.dart';
+import 'package:t_store/common/widgets/loader/loaders.dart';
+import 'package:t_store/data/user/user_repository.dart';
+import 'package:t_store/features/personalization/controllers/user_controller.dart';
 import 'package:t_store/features/personalization/screens/profile/change_name.dart';
 import 'package:t_store/features/personalization/screens/profile/change_phone_number.dart';
 import 'package:t_store/features/personalization/screens/profile/change_username.dart';
 import 'package:t_store/features/personalization/screens/profile/change_email.dart';
+import 'package:t_store/features/recepie/screens/home/widgets/home_appbar.dart';
+import 'package:t_store/utils/constants/colors.dart';
+import 'package:t_store/utils/constants/image_strings.dart';
+import 'package:t_store/utils/helpers/helper_functions.dart';
+import 'package:t_store/utils/helpers/network_manager.dart';
+import 'package:t_store/utils/popups/full_screen_loader.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final dark = THelperFunctions.isDarkMode(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Profile Information',
           style: TextStyle(
-            color: Color(0xFFE85A4F),
+            color: dark ? TColors.dark : TColors.light,
           ),
         ),
         centerTitle: true,
-        backgroundColor: const Color(0xFFEAE7DC),
+        // backgroundColor: const Color(0xFFEAE7DC),
         elevation: 0,
       ),
-      backgroundColor: const Color(0xFFEAE7DC),
+      // backgroundColor: const Color(0xFFEAE7DC),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(40.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Center(
-                child: CircleAvatar(
-                  radius: 75,
-                  backgroundImage:
-                      AssetImage('assets/images/profile_images/chef_2.jpeg'),
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Center(
-                child: Text(
-                  'Change Profile Picture',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFFE85A4F),
-                    fontWeight: FontWeight.bold,
-                  ),
+              SizedBox(
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    Obx((){
+                      final networkImage=UserController.instance.user.value.profilePicture;
+                      final image=networkImage.isNotEmpty ? networkImage : TImages.user2;
+                      return UserController.instance.imageUploading.value
+                          ? const TShimmerEffect(width: 80,height: 80,radius: 80,)
+                          :  TCircularImage(image: image,width: 150,height: 150,isNetworkImage: networkImage.isNotEmpty,);
+                    }),
+                    TextButton(onPressed: () => UserController.instance.uploadUserProfilePicture(), child: const Text('Change Profile Picture')),
+                  ],
                 ),
               ),
               const SizedBox(height: 60),
@@ -131,16 +140,16 @@ class ProfileScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 16.0),
-                  buildInfoRow('Name', 'Alex McWell',
+                  buildInfoRow(dark ? TColors.dark : TColors.light, 'Name', UserController.instance.user.value.fullName,
                       () => Get.to(() => const ChangeNameScreen())),
                   const SizedBox(height: 16.0),
-                  buildInfoRow('Username', '@alexmcwell',
+                  buildInfoRow(dark ? TColors.dark : TColors.light, 'Username', UserController.instance.user.value.username,
                       () => Get.to(() => const ChangeUsernameScreen())),
                   const SizedBox(height: 16.0),
-                  buildInfoRow('Email', 'alex@example.com',
+                  buildInfoRow(dark ? TColors.dark : TColors.light, 'Email', UserController.instance.user.value.email,
                       () => Get.to(() => const ChangeEmailScreen())),
                   const SizedBox(height: 16.0),
-                  buildInfoRow('Phone number', '+880179*******',
+                  buildInfoRow(dark ? TColors.dark : TColors.light, 'Phone number', '${UserController.instance.user.value.phoneNumber.replaceRange(5, 11, '*')}*****',
                       () => Get.to(() => const ChangeNumberScreen())),
                 ],
               ),
@@ -152,7 +161,7 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-Widget buildInfoRow(String label, String value, VoidCallback onEditPressed) {
+Widget buildInfoRow(Color color, String label, String value, VoidCallback onEditPressed) {
   return Row(
     children: [
       Expanded(
@@ -162,9 +171,9 @@ Widget buildInfoRow(String label, String value, VoidCallback onEditPressed) {
             Text(label,
                 style: const TextStyle(fontSize: 16, color: Color(0xFFE85A4F))),
             Text(value,
-                style: const TextStyle(
+                style: TextStyle(
                     fontSize: 16,
-                    color: Color(0xFF616161),
+                    color: color,
                     fontWeight: FontWeight.bold)),
           ],
         ),
@@ -175,4 +184,112 @@ Widget buildInfoRow(String label, String value, VoidCallback onEditPressed) {
       ),
     ],
   );
+}
+
+class UpdateNameController extends GetxController {
+  static UpdateNameController get instance => Get.find();
+
+  final firstName= TextEditingController();
+  final lastName= TextEditingController();
+  final phoneNumber= TextEditingController();
+  final userController = UserController.instance;
+  final userRepository= Get.put(UserRepository());
+  GlobalKey<FormState> updateUserNameFormKey =GlobalKey<FormState>();
+  GlobalKey<FormState> updatePhoneNumberFormKey =GlobalKey<FormState>();
+
+  //init user data when Home Screen appears
+  @override
+  void onInit(){
+    initializeNames();
+    super.onInit();
+  }
+
+  //Fetch user record
+  Future<void> initializeNames() async{
+    firstName.text=userController.user.value.firstName;
+    lastName.text=userController.user.value.lastName;
+    phoneNumber.text=userController.user.value.phoneNumber;
+  }
+
+  Future<void> updateUserName() async{
+    try{
+      //start loading
+      TFullScreenLoader.openLoadingDialog('We are updating your information', TImages.docerAnimation);
+
+      //Check Internet Connectivity
+      final isConnected= await NetworkManager.instance.isConnected();
+      if(!isConnected){
+        TFullScreenLoader.stopLoading();
+        return;
+      }
+      print(updateUserNameFormKey);
+
+      //Form Validation
+      if(!updateUserNameFormKey.currentState!.validate()){
+        TFullScreenLoader.stopLoading();
+        return;
+      }
+
+      //update user's first & last name in the Firebase Firestore
+      Map<String, dynamic> name={'FirstName': firstName.text.trim(),'LastName': lastName.text.trim()};
+      await userRepository.updateSingleField(name);
+
+      //update the Rx User value
+      userController.user.value.firstName=firstName.text.trim();
+      userController.user.value.lastName=lastName.text.trim();
+
+      //Remove loader
+      TFullScreenLoader.stopLoading();
+
+      //show success message
+      TLoaders.successSnackBar(title: 'Congratulations',message: 'Your name has been updates.');
+
+      //Move to previous screen
+      Get.off(() => const ProfileScreen());
+    }catch(e){
+      TFullScreenLoader.stopLoading();
+      TLoaders.errorSnackBar(title: 'Oh Snap!',message: e.toString());
+    }
+  }
+
+  Future<void> updatePhoneNumber() async{
+    try{
+      //start loading
+      TFullScreenLoader.openLoadingDialog('We are updating your information', TImages.docerAnimation);
+
+      //Check Internet Connectivity
+      final isConnected= await NetworkManager.instance.isConnected();
+      if(!isConnected){
+        TFullScreenLoader.stopLoading();
+        return;
+      }
+      print(updatePhoneNumberFormKey);
+
+      //Form Validation
+      if(!updatePhoneNumberFormKey.currentState!.validate()){
+        TFullScreenLoader.stopLoading();
+        return;
+      }
+
+      //update user's first & last name in the Firebase Firestore
+      Map<String, dynamic> phoneNum={'PhoneNumber': phoneNumber.text.trim()};
+      await userRepository.updateSingleField(phoneNum);
+
+      //update the Rx User value
+      userController.user.value.phoneNumber=phoneNumber.text.trim();
+
+      //Remove loader
+      TFullScreenLoader.stopLoading();
+
+      //show success message
+      TLoaders.successSnackBar(title: 'Congratulations',message: 'Your phone number has been updates.');
+
+      //Move to previous screen
+      Get.off(() => const ProfileScreen());
+    }catch(e){
+      TFullScreenLoader.stopLoading();
+      TLoaders.errorSnackBar(title: 'Oh Snap!',message: e.toString());
+    }
+  }
+
 }

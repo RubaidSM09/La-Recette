@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:t_store/data/repositories/authentication/authentication_repository.dart';
+import 'package:t_store/features/personalization/screens/admin/widgets/manage_recipe/manage_recipe.dart';
 import 'package:t_store/features/personalization/screens/admin/widgets/pending_blog.dart';
 import 'package:t_store/features/personalization/screens/admin/widgets/pending_recipe.dart';
 
@@ -50,21 +51,40 @@ class AdminDashboard extends StatelessWidget {
                         icon: Icons.pending,
                       ),
                     ),
-                    const TaskCard(
-                      task: 'Manage Recipes',
-                      icon: Icons.spoke_outlined,
+                    TextButton(
+                      onPressed: () => Get.to(() => const ManageRecipePage()),
+                      child: const TaskCard(
+                        task: 'Manage Recipes',
+                        icon: Icons.spoke_outlined,
+                      ),
                     ),
-                    const TaskCard(
-                      task: 'Manage Blogs',
-                      icon: Icons.newspaper,
+                    TextButton(
+                      onPressed: () => Get.to(() => const AdminPendingBlogList()),
+                      child: const TaskCard(
+                        task: 'Manage Blogs',
+                        icon: Icons.newspaper,
+                      ),
                     ),
-                    const TaskCard(
-                      task: 'Manage Users',
-                      icon: Icons.supervised_user_circle,
+                    TextButton(
+                      onPressed: () => Get.to(() => const AdminPendingBlogList()),
+                      child: const TaskCard(
+                        task: 'Manage Users',
+                        icon: Icons.supervised_user_circle,
+                      ),
                     ),
-                    const TaskCard(
-                      task: 'Manage Ingredients',
-                      icon: Icons.egg,
+                    TextButton(
+                      onPressed: () => Get.to(() => const AdminPendingBlogList()),
+                      child: const TaskCard(
+                        task: 'Manage Ingredients',
+                        icon: Icons.egg,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => Get.to(() => const AdminPendingBlogList()),
+                      child: const TaskCard(
+                        task: 'Manage Categories',
+                        icon: Icons.category,
+                      ),
                     ),
                     const SizedBox(height: 16,),
                     SizedBox(

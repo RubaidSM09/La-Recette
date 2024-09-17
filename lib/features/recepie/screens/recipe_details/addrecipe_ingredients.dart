@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:t_store/features/recepie/controllers/category_controller.dart';
 import 'dart:io';
 import 'package:t_store/features/recepie/controllers/recipe/addrecipe_ingredients_controller.dart';
-import 'confirmationRecipe.dart'; // Import the ConfirmationPage
+// import 'package:t_store/features/recepie/controllers/recipe/category_controller.dart'; // Import CategoryController
+import 'confirmationRecipe.dart';
 
 class AddProcedureScreen extends StatefulWidget {
   const AddProcedureScreen({super.key});
@@ -14,12 +16,15 @@ class AddProcedureScreen extends StatefulWidget {
 
 class _AddProcedureScreenState extends State<AddProcedureScreen> {
   final AddIngredientsController _controller = Get.put(AddIngredientsController());
+  final CategoryController _categoryController = Get.put(CategoryController()); // Initialize CategoryController
+
   File? _image;
 
   @override
   void initState() {
     super.initState();
-    _controller.addIngredient(); // Add initial ingredient field
+    _controller.addIngredient();
+    _categoryController.fetchCategories(); // Fetch categories on screen load
   }
 
   Future<void> _pickImage() async {
@@ -27,14 +32,11 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
     if (pickedFile != null) {
       _controller.image.value = File(pickedFile.path);
     }
-      // _controller.image.value = _image!.path;
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final List<String> categories = ["burger", "pizza", "Turkish", "Mexican", "snacks", "dessert"];
-    String selectedCategory = categories[0];
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -220,33 +222,39 @@ class _AddProcedureScreenState extends State<AddProcedureScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: const Color(0xFFE85A4F),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                        value: selectedCategory,
-                        items: categories.map((String category) {
-                          return DropdownMenuItem<String>(
-                            value: category,
-                            child: Text(category),
-                          );
-                        }).toList(),
-                        onChanged: (newValue) {
-                          _controller.category.value = newValue!;
-                        },
-                        hint: const Text('Category'),
+                Obx(() {
+                  if (_categoryController.isLoading.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  // Populate categories from Firebase
+                  final categories = _categoryController.allCategories;
+                  if (categories.isEmpty) {
+                    return const Text('No categories found');
+                  }
+
+                  return DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: const Color(0xFFE85A4F),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide.none,
                       ),
                     ),
-                  ],
-                ),
+                    value: categories.first.name, // Default to first category
+                    items: categories.map((category) {
+                      return DropdownMenuItem<String>(
+                        value: category.name,
+                        child: Text(category.name),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      _controller.category.value = newValue!;
+                    },
+                    hint: const Text('Category'),
+                  );
+                }),
                 const SizedBox(height: 16),
                 const Text(
                   'Description:',

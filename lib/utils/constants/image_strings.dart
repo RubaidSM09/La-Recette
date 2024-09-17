@@ -156,7 +156,8 @@ class TImages {
 
 
   //Profile
-  static const String user = "assets/images/content/user.png";
+  static const String user = "assets/images/content/PfP.png";
+  static const String user2 = "https://firebasestorage.googleapis.com/v0/b/la-recette-35bc0.appspot.com/o/Users%2FImages%2FProfile%2FPfP.png?alt=media&token=e086eb22-5825-4437-a25a-ce3332048a9d";
 
   // -- Payment Methods
   static const String applePay = "assets/icons/payment_methods/apple-pay.png";

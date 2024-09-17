@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:t_store/common/widgets/images/t_circular_image.dart';
 import 'package:t_store/common/widgets/recepies/recepie_cards/product_card_vertical.dart';
 import 'package:t_store/common/widgets/shimmers/vertical_product_shimmer.dart';
 import 'package:t_store/data/repositories/authentication/authentication_repository.dart';
@@ -9,6 +10,7 @@ import 'package:t_store/features/personalization/screens/profile/profile.dart';
 import 'package:t_store/features/recepie/controllers/blog_controller.dart';
 import 'package:t_store/features/recepie/controllers/recipe/recipe_controller.dart';
 import 'package:t_store/features/recepie/screens/blogs/widgets/blogCard.dart';
+import 'package:t_store/features/recepie/screens/home/widgets/home_appbar.dart';
 import 'package:t_store/features/recepie/screens/recipe_details/addrecipe_ingredients.dart';
 import 'package:t_store/navigation_menu.dart';
 import 'package:t_store/utils/constants/colors.dart';
@@ -119,12 +121,14 @@ class SettingsScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Center(
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundImage:
-                      AssetImage('assets/images/profile_images/chef_2.jpeg'),
-                ),
+              Center(
+                child: Obx((){
+                  final networkImage=UserController.instance.user.value.profilePicture;
+                  final image=networkImage.isNotEmpty ? networkImage : TImages.user2;
+                  return UserController.instance.imageUploading.value
+                    ? const TShimmerEffect(width: 80,height: 80,radius: 80,)
+                    :  TCircularImage(image: image,width: 150,height: 150,isNetworkImage: networkImage.isNotEmpty,);
+                }),
               ),
               const SizedBox(height: 16),
               Center(

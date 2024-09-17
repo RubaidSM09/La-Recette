@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:t_store/features/personalization/controllers/user_controller.dart';
 import 'package:t_store/utils/helpers/helper_functions.dart';
 
 import '../../../../../common/widgets/appbar/appbar.dart';
@@ -16,6 +18,7 @@ class THomeAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
+    final userController = UserController.instance;
     return TAppBar(
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,7 +28,7 @@ class THomeAppBar extends StatelessWidget {
             style: Theme.of(context).textTheme.labelMedium!.apply(color: dark ? TColors.dark : const Color(0xFFE85A4F)),
           ),
           Text(
-            TTexts.homeAppbarSubTitle,
+            userController.user.value.fullName,
             style: Theme.of(context).textTheme.headlineSmall!.apply(color: dark ? TColors.dark : const Color(0xFFE85A4F)),
           ),
         ],

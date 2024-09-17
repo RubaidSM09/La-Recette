@@ -17,6 +17,7 @@ import 'package:t_store/utils/local_storage/storage_utility.dart';
 import '../../../features/authentication/screens/login/login.dart';
 import '../../../features/authentication/screens/onboarding/onboarding.dart';
 import '../../../features/authentication/screens/signup/verify_email.dart';
+import '../../../features/personalization/controllers/user_controller.dart';
 
 class AuthenticationRepository extends GetxController {
   //getter method
@@ -45,7 +46,7 @@ class AuthenticationRepository extends GetxController {
         //initialize user specific storage
         await TLocalStorage.init(user.uid);
 
-
+        final userController = Get.put(UserController());
         final notificationsController = Get.put(NotificationsController());
         Get.offAll(() => const NavigationMenu());
       } else {

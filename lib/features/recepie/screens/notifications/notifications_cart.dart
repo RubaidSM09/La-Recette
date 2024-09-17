@@ -8,6 +8,8 @@ import 'package:t_store/common/widgets/texts/product_title_text.dart';
 import 'package:t_store/common/widgets/texts/t_brand_title_text_with_verified_icon.dart';
 import 'package:t_store/features/personalization/screens/admin/widgets/admin_blog_details.dart';
 import 'package:t_store/features/personalization/screens/admin/widgets/admin_recipe_details.dart';
+import 'package:t_store/features/personalization/screens/admin/widgets/pending_blog.dart';
+import 'package:t_store/features/personalization/screens/admin/widgets/pending_recipe.dart';
 import 'package:t_store/features/recepie/controllers/blog_controller.dart';
 import 'package:t_store/features/recepie/controllers/notifications_controller.dart';
 import 'package:t_store/features/recepie/models/blog_model.dart';
@@ -41,10 +43,10 @@ class NotificationsCard extends StatelessWidget {
           Get.to(() => BlogDetailsPage(blogId: notifications.path.toString()));
         }
         else if(notifications.type == "Recipe Pending"){
-          Get.to(() => AdminRecipePage(recipeId: notifications.path.toString()));
+          Get.to(() => const AdminPendingRecipeList());
         }
         else if(notifications.type == "Blog Pending"){
-          Get.to(() => AdminBlogPage(blogId: notifications.path.toString()));
+          Get.to(() => const AdminPendingBlogList());
         }
       },
       child: Column(
